@@ -1,0 +1,38 @@
+[
+	{
+		"title": "Camiseta suplente Argentina",
+		"description": "Camiseta Argentina violeta, tela de juego",
+		"price": "25.000",
+		"thumbnail": "imagen",
+		"code": "234",
+		"stock": "86",
+		"id": 1
+	},
+	{
+		"title": "Camiseta titular Argentina",
+		"description": "Camiseta Argentina celeste y blanca, tela de juego",
+		"price": "25.000",
+		"thumbnail": "imagen",
+		"code": "123",
+		"stock": "22",
+		"id": 2
+	},
+	{
+		"title": "Buzo de Arquero titular Emiliano Martinez",
+		"description": "Buzo de arquero verde, tela de juego",
+		"price": "25.000",
+		"thumbnail": "imagen",
+		"code": "789",
+		"stock": "10",
+		"id": 3
+	},
+	{
+		"title": "Buzo de arquero suplente, Emiliano Martinez",
+		"description": "Buzo de arquero rojo, tela de juego",
+		"price": "25.000",
+		"thumbnail": "imagen",
+		"code": "110",
+		"stock": "78",
+		"id": 4
+	}
+]
