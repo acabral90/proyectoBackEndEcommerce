@@ -84,15 +84,18 @@ export default class ProductManager {
 
         const products = await this.getProducts();
 
-        let productIndex = products.findIndex((items) => items.id == productId._method)
+        if(productId._method == ''){
+            return products
+        }else{
 
-        console.log(productIndex)
+            let productIndex = products.findIndex((items) => items.id == productId._method)
 
-        let productoEliminado = products.splice(productIndex, 1)
+            products.splice(productIndex, 1)
 
-        await fs.promises.writeFile(path, JSON.stringify(products, null, '\t'))
-    
-        return products
+            await fs.promises.writeFile(path, JSON.stringify(products, null, '\t'))
+        
+            return products
+        }
 
     }
 

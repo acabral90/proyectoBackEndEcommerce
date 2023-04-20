@@ -5,9 +5,17 @@ import { Server } from "socket.io";
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 
+import  methodOverride  from "method-override";
+ 
+
 const PORT = 8080;
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
+app.use(methodOverride('_method'));
 
 app.use(express.static(__dirname+'/public'));
 
@@ -15,8 +23,7 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+
 
 app.use('/', viewRouter);
 

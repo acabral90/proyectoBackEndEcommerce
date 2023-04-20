@@ -36,19 +36,17 @@ router.post('/realtimeproducts', async (req, res)=>{
     res.render('realTimeProducts', {arrayProducts})
 })
 
-router.get('/realtimeproducts/:pid', async (req,res)=>{
+router.delete('/realtimeproducts', async (req,res)=>{
     
-    const pid = req.params.pid
+    const product = req.body;
 
-    console.log(pid)
-
-    let productoEliminado = await manager.deleteProduct(pid)
+    let productoEliminado = await manager.deleteProduct(product)
 
     let products = await manager.getProducts();
 
     let arrayProducts = [...products]
     
-    res.render('realTimeProducts', {arrayProducts})
+    res.render('realtimeproducts', {arrayProducts})
 
 })
 

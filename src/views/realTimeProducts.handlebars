@@ -37,13 +37,10 @@
 <div>
     <h1>Eliminar Productos</h1>
     <br>
-    <form action="/realtimeproducts/:pid" method="get">
+    <form action="/realtimeproducts?_method=delete" method="POST">
         <label>ID del producto a eliminar</label>
-        <input name="_method" value="DELETE" type="number">
+        <input type="number" name="_method" value="DELETE">
 
         <input type="submit">
     </form>
 </div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/home.js"></script>
