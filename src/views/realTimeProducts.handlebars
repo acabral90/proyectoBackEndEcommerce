@@ -6,11 +6,12 @@
             <h2>{{this.title}}</h2>
             <h3>{{this.description}}</h3>
             <h4>{{this.price}}</h4>
+            <h5>{{this._id}}</h5>
         </div>
         {{/each}}
     <br>
 </div>
-
+<br>
 <div>
     <h1>Agregar productos</h1>
     <br>
@@ -38,8 +39,19 @@
     <h1>Eliminar Productos</h1>
     <br>
     <form action="/realtimeproducts?_method=delete" method="POST">
-        <label>ID del producto a eliminar</label>
-        <input type="number" name="_method" value="DELETE">
+        <label>Id del producto</label>
+        <input type="search" name="_method" value="DELETE">
+
+        <input type="submit">
+    </form>
+</div>
+
+<div>
+    <h1>Editar producto</h1>
+    <br>
+    <form action="/realtimeproducts?_method=update" method="POST">
+        <label>Nombre del producto</label>
+        <input type="text" name="_method" value="UPDATE">
 
         <input type="submit">
     </form>

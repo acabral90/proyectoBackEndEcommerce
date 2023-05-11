@@ -1,5 +1,6 @@
 import { Router } from "express";
-import ProductManager from '../manager/productManager.js';
+import productModel from "../dao/models/products.js";
+import ProductManager from "../dao/manager/productManager.js";
  
 const router = Router();
 
@@ -40,13 +41,15 @@ router.delete('/realtimeproducts', async (req,res)=>{
     
     const product = req.body;
 
+    console.log(product)
+
     let productoEliminado = await manager.deleteProduct(product)
 
     let products = await manager.getProducts();
 
     let arrayProducts = [...products]
     
-    res.render('realtimeproducts', {arrayProducts})
+    res.render('realTimeProducts', {arrayProducts})
 
 })
 

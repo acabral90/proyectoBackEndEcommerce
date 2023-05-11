@@ -1,6 +1,9 @@
 import express from "express";
+import mongoose from "mongoose";
+
 import handlebars from 'express-handlebars';
 import { Server } from "socket.io";
+
 
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
@@ -9,8 +12,10 @@ import  methodOverride  from "method-override";
  
 
 const PORT = 8080;
+const MONGO = 'mongodb+srv://acabral:acabral@cluster0.sx9b4ns.mongodb.net/?retryWrites=true&w=majority'
 
 const app = express();
+const connection = mongoose.connect(MONGO);
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
