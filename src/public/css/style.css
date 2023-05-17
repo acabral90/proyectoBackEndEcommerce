@@ -1,0 +1,74 @@
+.productsContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.productsContainer-title{
+    text-align: center;
+}
+
+.productCard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid;
+}
+
+.addProduct-container{
+    display: flex;
+    flex-direction: column;
+    border: solid;
+    
+}
+
+.addProduct-title{
+    text-align: center;
+}
+
+.addProduct-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.addFormLabels{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.dltProduct-container{
+    border: solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 25px 0px 25px 0px;
+    padding-bottom: 25px;
+}
+
+.dltProduct-form{
+    display: flex;
+    gap: 20px;
+}
+
+.updProduct-container{
+    border: solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.updProduct-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.updFormLabels{
+    display: flex;
+    gap: 10px;
+}

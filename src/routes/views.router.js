@@ -6,13 +6,8 @@ const router = Router();
 
 const manager = new ProductManager();
 
-router.get('/', async (req,res)=>{
-
-    let products = await manager.getProducts();
-
-    let arrayProducts = [...products]
-    
-    return res.render('home', {arrayProducts})
+router.get('/chat', async (req, res)=>{
+    res.render('chat', {})
 })
 
 router.get('/realtimeproducts', async (req,res)=>{
@@ -21,8 +16,9 @@ router.get('/realtimeproducts', async (req,res)=>{
 
     let arrayProducts = [...products]
     
-    return res.render('realTimeProducts', {arrayProducts})
+    return res.render('realTimeProducts', {arrayProducts, style:'style.css'})
 })
+
 
 router.post('/realtimeproducts', async (req, res)=>{
 
@@ -34,7 +30,7 @@ router.post('/realtimeproducts', async (req, res)=>{
 
     let arrayProducts = [...products]
     
-    res.render('realTimeProducts', {arrayProducts})
+    res.render('realTimeProducts', {arrayProducts, style:'style.css'})
 })
 
 router.delete('/realtimeproducts', async (req,res)=>{
@@ -49,7 +45,23 @@ router.delete('/realtimeproducts', async (req,res)=>{
 
     let arrayProducts = [...products]
     
-    res.render('realTimeProducts', {arrayProducts})
+    res.render('realTimeProducts', {arrayProducts, style:'style.css'})
+
+})
+
+router.put('/realtimeproducts', async (req,res)=>{
+
+    const product = req.body;
+
+    console.log(product)
+
+    let productUpdated = await manager.updateProduct(product)
+
+    let products = await manager.getProducts();
+
+    let arrayProducts = [...products]
+
+    res.render('realTimeProducts', {arrayProducts, style:'style.css'})
 
 })
 

@@ -1,4 +1,5 @@
 import productModel from "../models/products.js";
+import Swal from "sweetalert2";
 
 export default class ProductManager {
 
@@ -35,29 +36,39 @@ export default class ProductManager {
 
     }
 
-    updateProduct = async (product, pid) =>{
-        const {title, description, price, thumbnail, code, stock} = product
+    updateProduct = async (product) =>{
+        const {title, description, price, stock, id} = product
 
-        const products = await this.getProducts();
-        
-        let findProduct = products.find(item => item.id == pid)
+        if(!id){
+            let alert = Swal.fire({
+                        title: 'Custom animation with Animate.css',
+                        showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    })
+
+            return alert 
+        }
+
+        const dbProduct = await productModel.findById({_id: id}).lean();
 
         if(title){
-            findProduct.title = title
+            dbProduct.title = title;
         }if(description){
-            findProduct.description = description
+            dbProduct.description = description;
         }if(price){
-            findProduct.price = price
-        }if(thumbnail){
-            findProduct.thumbnail = thumbnail
-        }if(code){
-            findProduct.code = code
+            dbProduct.price = price;
         }if(stock){
-            findProduct.stock = stock
-        };
+            dbProduct.stock = stock;
+        }
 
-        await fs.promises.writeFile(path, JSON.stringify(products, null, '\t'))
-        return findProduct
+        const item = await productModel.updateOne({_id: id}, dbProduct);
+            
+        return item
+           
     }
 
     deleteProduct = async (productId) =>{

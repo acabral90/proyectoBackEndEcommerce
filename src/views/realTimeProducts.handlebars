@@ -1,57 +1,92 @@
 <div>
-    <h1>Productos en tiempo real</h1>
+    <h1 class="productsContainer-title">Productos en tiempo real</h1>
     <br>
-        {{#each arrayProducts}}
-        <div>
-            <h2>{{this.title}}</h2>
-            <h3>{{this.description}}</h3>
-            <h4>{{this.price}}</h4>
-            <h5>{{this._id}}</h5>
+        <div class="productsContainer">
+            {{#each arrayProducts}}
+            <div class="productCard">
+                <h2>{{this.title}}</h2>
+                <h3>{{this.description}}</h3>
+                <h4>{{this.price}}</h4>
+                <h5>ID:{{this._id}}</h5>
+            </div>
+            {{/each}}
         </div>
-        {{/each}}
     <br>
 </div>
 <br>
-<div>
-    <h1>Agregar productos</h1>
+<div class="addProduct-container">
+    <h1 class="addProduct-title">Agregar productos</h1>
     <br>
-    <form action="/realtimeproducts" method="post">
+    <form class="addProduct-form"  action="/realtimeproducts" method="post">
+        <div class="addFormLabels">
         <label>Nombre</label>
         <input name="title">
+        </div>
 
+        <div class="addFormLabels">
         <label>Descripcion</label>
         <input name="description">
+        </div>
 
+        <div class="addFormLabels">
         <label>Precio</label>
         <input name="price" type="number">
+        </div>
 
+        <div class="addFormLabels">
         <label>Stock</label>
         <input name="stock" type="number">
+        </div>
 
+        <div class="addFormLabels">
         <label>Categoria</label>
         <input name="category">
+        </div>
 
-        <input type="submit">
+        <input class="formSubmit" type="submit">
     </form>
 </div>
 
-<div>
-    <h1>Eliminar Productos</h1>
+<div class="dltProduct-container">
+    <h1 Eliminar class="dltProduct-title">Eliminar Productos</h1>
     <br>
-    <form action="/realtimeproducts?_method=delete" method="POST">
+    <form class="dltProduct-form" action="/realtimeproducts?_method=delete" method="POST">
         <label>Id del producto</label>
-        <input type="search" name="_method" value="DELETE">
+        <input type="search" name="_method">
 
         <input type="submit">
     </form>
 </div>
 
-<div>
-    <h1>Editar producto</h1>
+<div class="updProduct-container">
+    <h1 class="updProduct-title">Editar producto</h1>
     <br>
-    <form action="/realtimeproducts?_method=update" method="POST">
-        <label>Nombre del producto</label>
-        <input type="text" name="_method" value="UPDATE">
+    <form class="updProduct-form" action="/realtimeproducts?_method=put" method="POST">
+    
+        <div class="updFormLabels">
+            <label>ID del producto</label>
+            <input type="search" name="id" >
+        </div>
+
+        <div class="updFormLabels">
+            <label>Nuevo nombre</label>
+            <input type="search" name="title">
+        </div>
+
+        <div class="updFormLabels">
+            <label></label>Nueva descripcion</label>
+            <input type="search" name="description">
+        </div>
+
+        <div class="updFormLabels">
+            <label>Nuevo precio</label>
+            <input type="number" name="price">
+        </div>
+
+        <div class="updFormLabels">
+            <label>Nuevo stock</label>
+            <input type="number" name="stock">
+        </div>
 
         <input type="submit">
     </form>
