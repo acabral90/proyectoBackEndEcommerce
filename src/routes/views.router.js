@@ -10,30 +10,93 @@ router.get('/chat', async (req, res)=>{
     res.render('chat', {})
 })
 
-router.get('/realtimeproducts', async (req,res)=>{
+/*router.get('/products', async (req,res)=>{
 
     let products = await manager.getProducts();
 
     let arrayProducts = [...products]
     
-    return res.render('realTimeProducts', {arrayProducts, style:'style.css'})
+    return res.render('products', {arrayProducts, style:'style.css'})
+})*/
+
+/*router.get('/products', async (req, res)=>{
+
+    const { page = 1 } = req.query; 
+
+    const { result, code, status } = await manager.getProductsPaginate(page);
+
+    const { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result
+
+    return  res.render( 'products', {
+        status: status,
+        docs,
+        hasNextPage,
+        hasPrevPage,
+        page,
+        prevPage,
+        nextPage,
+        style: 'style.css'
+
+    })
+})*/
+
+router.get('/products', async (req, res)=>{
+
+    const category = req.query;
+
+    const { page = 1 } = req.query; 
+
+    //console.log(category)
+
+    let { result, code, status } = await manager.getProductsPaginate(page, category);
+
+    //console.log(result)
+
+    let { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result
+
+    return  res.render( 'products', {
+        status: status,
+        docs,
+        hasNextPage,
+        hasPrevPage,
+        page,
+        prevPage,
+        nextPage,
+        style: 'style.css'
+
+    })
 })
 
-
-router.post('/realtimeproducts', async (req, res)=>{
+router.post('/products', async (req, res)=>{
 
     const product = req.body;
 
     let addItem = await manager.addProducts(product)
 
-    let products = await manager.getProducts();
+    const { page = 1 } = req.query; 
 
-    let arrayProducts = [...products]
-    
-    res.render('realTimeProducts', {arrayProducts, style:'style.css'})
+    //console.log(products)
+
+    const { result, hasPrevPage, hasNextPage, prevPage, nextPage, code, status } = await manager.getProductsPaginate();
+
+    const products = result.docs
+
+    //console.log(result)
+
+    return  res.render( 'products', {
+        status: status,
+        products,
+        hasNextPage,
+        hasPrevPage,
+        page,
+        prevPage,
+        nextPage,
+        style: 'style.css'
+
+    })
 })
 
-router.delete('/realtimeproducts', async (req,res)=>{
+router.delete('/products', async (req,res)=>{
     
     const product = req.body;
 
@@ -45,11 +108,11 @@ router.delete('/realtimeproducts', async (req,res)=>{
 
     let arrayProducts = [...products]
     
-    res.render('realTimeProducts', {arrayProducts, style:'style.css'})
+    res.render('products', {arrayProducts, style:'style.css'})
 
 })
 
-router.put('/realtimeproducts', async (req,res)=>{
+router.put('/products', async (req,res)=>{
 
     const product = req.body;
 
@@ -61,7 +124,7 @@ router.put('/realtimeproducts', async (req,res)=>{
 
     let arrayProducts = [...products]
 
-    res.render('realTimeProducts', {arrayProducts, style:'style.css'})
+    res.render('products', {arrayProducts, style:'style.css'})
 
 })
 

@@ -1,8 +1,20 @@
 <div>
-    <h1 class="productsContainer-title">Productos en tiempo real</h1>
+    <h1 class="productsContainer-title">Productos</h1>
     <br>
+
+        <form method="get" action="/products">
+            <!-- Lista de selección -->
+            Filtrar por  categoría:
+            <select name="categorias">
+            <!-- Opciones de la lista -->
+                <option selected>Todas</option>
+                <option name="camisetas" value="camisetas">Camisetas</option>
+                <option name="pantalones" value="pantalones">Pantalones</option>
+            </select>
+            <input type="submit" value="enviar">
+        </form>
         <div class="productsContainer">
-            {{#each arrayProducts}}
+            {{#each docs}}
             <div class="productCard">
                 <h2>{{this.title}}</h2>
                 <h3>{{this.description}}</h3>
@@ -11,13 +23,22 @@
             </div>
             {{/each}}
         </div>
+        <div>
+            {{#if hasPrevPage}}
+                <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
+            {{/if}}
+                
+            {{#if hasNextPage}}
+                <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
+            {{/if}}
+        </div>
     <br>
 </div>
 <br>
 <div class="addProduct-container">
     <h1 class="addProduct-title">Agregar productos</h1>
     <br>
-    <form class="addProduct-form"  action="/realtimeproducts" method="post">
+    <form class="addProduct-form"  action="/products" method="post">
         <div class="addFormLabels">
         <label>Nombre</label>
         <input name="title">

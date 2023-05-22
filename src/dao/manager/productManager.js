@@ -19,6 +19,35 @@ export default class ProductManager {
         return filterProduct
     }
 
+    async getProductsPaginate(page, category){
+
+        if(Object.keys(category).length === 0 || category.categorias === undefined){
+            const result = await productModel.paginate({}, {limit:4, page, lean:true});
+        
+            return {
+                code: 202,
+                status: 'success',
+                result
+            }
+        }else{
+            const { categorias } = category
+
+            console.log(categorias)
+
+            let result = await productModel.paginate({category: categorias}, {limit:4, page, lean:true});
+
+            return {
+                code: 202,
+                status: 'success',
+                result
+            }
+        }      
+    }
+
+    async getProductsPaginateCategories(page, category){
+        
+    }
+
     async addProducts (item){
 
         const {title, description, price, stock, category} = item
