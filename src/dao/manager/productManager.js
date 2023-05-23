@@ -1,5 +1,6 @@
 import productModel from "../models/products.js";
 import Swal from "sweetalert2";
+//import addToCart from "../../public/js/home.js";
 
 export default class ProductManager {
 
@@ -10,18 +11,23 @@ export default class ProductManager {
         return products
     }
 
-    async getProductById(pid){
+    async getProductById(){
+
+        const pid = await addToCart();
+
+        console.log(pid);
 
         const products = await this.getProducts();
         
-        let filterProduct = products.filter(product => product.id == pid)
+        let filterProduct = products.filter(product => product._id == pid);
 
         return filterProduct
     }
 
     async getProductsPaginate(page, category){
 
-        if(Object.keys(category).length === 0 || category.categorias === undefined){
+        if(Object.keys(category).length === 0 || category.categorias === undefined || category.categorias === 'Todas'){
+            
             const result = await productModel.paginate({}, {limit:4, page, lean:true});
         
             return {
@@ -31,8 +37,6 @@ export default class ProductManager {
             }
         }else{
             const { categorias } = category
-
-            console.log(categorias)
 
             let result = await productModel.paginate({category: categorias}, {limit:4, page, lean:true});
 
@@ -44,9 +48,23 @@ export default class ProductManager {
         }      
     }
 
-    async getProductsPaginateCategories(page, category){
+    /*async getProductsPaginateCategories(page, category){
         
-    }
+        const { categorias } = category
+
+        console.log(categorias)
+
+        let result = await productModel.paginate({category: categorias}, {limit:4, page, lean:true});
+
+        console.log(result)
+
+        return {
+            code: 202,
+            status: 'success',
+            result
+        }
+
+    }*/
 
     async addProducts (item){
 

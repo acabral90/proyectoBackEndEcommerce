@@ -19,17 +19,28 @@
                 <h2>{{this.title}}</h2>
                 <h3>{{this.description}}</h3>
                 <h4>{{this.price}}</h4>
-                <h5>ID:{{this._id}}</h5>
+                <h5 id="productId">ID:{{this._id}}</h5>
+                <button id="addToCart">Agregar al carrito</button>
             </div>
             {{/each}}
         </div>
         <div>
-            {{#if hasPrevPage}}
-                <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
-            {{/if}}
-                
-            {{#if hasNextPage}}
-                <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
+            {{#if categoryExist }}
+                {{#if hasPrevPage}}
+                    <a href="/products?categorias=camisetas&page={{prevPage}}"><button>Anterior</button></a>
+                {{/if}}
+                    
+                {{#if hasNextPage}}
+                    <a href="/products?categorias=camisetas&page={{nextPage}}"><button>Siguiente</button></a>
+                {{/if}}
+            {{else}}
+                {{#if hasPrevPage}}
+                    <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
+                {{/if}}
+                    
+                {{#if hasNextPage}}
+                    <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
+                {{/if}}
             {{/if}}
         </div>
     <br>
@@ -112,3 +123,6 @@
         <input type="submit">
     </form>
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="js/home.js"></script>

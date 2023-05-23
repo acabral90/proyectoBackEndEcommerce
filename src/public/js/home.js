@@ -1,12 +1,10 @@
 
-const Socket = io();
-let user;
+//const Socket = io();
+//let user;
 
+//const chatbox = document.getElementById('chatbox');
 
-
-const chatbox = document.getElementById('chatbox');
-
-Swal.fire({
+/*Swal.fire({
     title: "Identifícate",
     input: "text",
     inputValidator: (value) =>{
@@ -44,3 +42,51 @@ Socket.on('messageLogs', data =>{
     });
     log.innerHTML = messages
 })
+
+//Funcion del evento para agregar un producto al carrito
+
+//async function addToCart() {
+
+    //if (typeof document !== 'undefined'){
+        const btnAddToCart = document.getElementById('addToCart');
+        const productId = document.getElementById('productId');
+
+        btnAddToCart.addEventListener('click', evt => {
+            console.log(evt)
+            const id = productId.textContent.substring(3);
+            console.log(id)
+            
+        });
+ //   }      
+//}
+
+//export default addToCart;*/
+
+    document.getElementById('addToCart').addEventListener('click', function() {
+        // Datos a enviar al servidor
+        const productId = document.getElementById('productId');
+        
+        const id = productId.textContent.substring(3);
+        const data = { message: 'Hola servidor' };
+  
+        // Configurar la solicitud
+        const options = {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        };
+  
+        // Realizar la solicitud al servidor
+        fetch('/products', options)
+        .then(response => response)
+        .then(responseData => {
+            // Manejar la respuesta del servidor
+            console.log(responseData);
+        })
+        .catch(error => {
+            // Manejar errores
+            console.error(error);
+        });
+  });

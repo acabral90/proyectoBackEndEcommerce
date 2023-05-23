@@ -44,11 +44,43 @@ router.get('/products', async (req, res)=>{
 
     const category = req.query;
 
+    //console.log(category)
+
+    const { page = 1 } = req.query; 
+
+    let { result, code, status } = await manager.getProductsPaginate(page, category);
+
+    //console.log(result)
+
+    let { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result
+
+    //let pid = await manager.getProductById()
+
+    //console.log(pid)
+
+    return  res.render( 'products', {
+        status: status,
+        docs,
+        hasNextPage,
+        hasPrevPage,
+        page,
+        prevPage,
+        nextPage,
+        categoryExist: category.categorias === 'camisetas',
+        style: 'style.css'
+
+    })
+})
+
+/*router.get('/products/categories', async (req, res)=>{
+
+    const category = req.query;
+
     const { page = 1 } = req.query; 
 
     //console.log(category)
 
-    let { result, code, status } = await manager.getProductsPaginate(page, category);
+    let { result, code, status } = await manager.getProductsPaginateCategories(page, category);
 
     //console.log(result)
 
@@ -62,10 +94,11 @@ router.get('/products', async (req, res)=>{
         page,
         prevPage,
         nextPage,
+        categoryExist: category.categorias === 'camisetas',
         style: 'style.css'
 
     })
-})
+})*/
 
 router.post('/products', async (req, res)=>{
 
@@ -95,6 +128,7 @@ router.post('/products', async (req, res)=>{
 
     })
 })
+
 
 router.delete('/products', async (req,res)=>{
     
