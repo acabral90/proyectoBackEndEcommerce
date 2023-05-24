@@ -1,6 +1,6 @@
 import productModel from "../models/products.js";
 import Swal from "sweetalert2";
-//import addToCart from "../../public/js/home.js";
+
 
 export default class ProductManager {
 

@@ -23,7 +23,7 @@ export default class CartManager{
 
     async updateCart(cid, pid){
  
-        const cart = await cartModel.findOne({_id:cid})
+        const cart = await cartModel.findById({_id:cid}).lean();
 
         const prodIndex = cart.products.findIndex(u=>u._id === pid);
 
@@ -38,10 +38,13 @@ export default class CartManager{
             let total = cart.products[prodIndex].quantity;
             cart.products[prodIndex].quantity = total + 1;
         }
+        
+        const result = await cartModel.updateOne({_id:cid}, {$set:cart}, {upsert:true})
 
-        const result = await cartModel.updateOne({_id:cid},{$set:cart})
+        console.log(cart)
+        console.log(result)
 
-        return cart.products
+        return cart
         
     };
 

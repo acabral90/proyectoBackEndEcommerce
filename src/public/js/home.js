@@ -41,52 +41,37 @@ Socket.on('messageLogs', data =>{
         messages +=  `${ message.user } dice: ${ message.message } <br/>  `       
     });
     log.innerHTML = messages
-})
+})*/
 
 //Funcion del evento para agregar un producto al carrito
 
-//async function addToCart() {
+let currentCartId = null;
 
-    //if (typeof document !== 'undefined'){
-        const btnAddToCart = document.getElementById('addToCart');
-        const productId = document.getElementById('productId');
+const addToCartButton = document.querySelector("#addToCart");
 
-        btnAddToCart.addEventListener('click', evt => {
-            console.log(evt)
-            const id = productId.textContent.substring(3);
-            console.log(id)
-            
-        });
- //   }      
-//}
+addToCartButton.addEventListener("click", async (event) => {
 
-//export default addToCart;*/
+event.preventDefault();
 
-    document.getElementById('addToCart').addEventListener('click', function() {
-        // Datos a enviar al servidor
-        const productId = document.getElementById('productId');
-        
-        const id = productId.textContent.substring(3);
-        const data = { message: 'Hola servidor' };
-  
-        // Configurar la solicitud
-        const options = {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-        };
-  
-        // Realizar la solicitud al servidor
-        fetch('/products', options)
-        .then(response => response)
-        .then(responseData => {
-            // Manejar la respuesta del servidor
-            console.log(responseData);
-        })
-        .catch(error => {
-            // Manejar errores
-            console.error(error);
-        });
-  });
+if (!currentCartId) {
+
+const cartResponse = await fetch("api/carts", { method: "POST" });
+
+const cartData = await cartResponse.json();
+
+console.log(cartData)
+
+currentCartId = cartData.respuesta[0]._id
+
+console.log( {currentCartId} );
+
+}
+
+const productId = document.querySelector("#productId").textContent.substring(3);
+
+console.log({ productId });
+
+const updateResponse = await fetch(`/api/carts/${currentCartId}/product/${productId}`, { method: "POST" });
+console.log(updateResponse)
+
+});
