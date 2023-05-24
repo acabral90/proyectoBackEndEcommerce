@@ -48,24 +48,6 @@ export default class ProductManager {
         }      
     }
 
-    /*async getProductsPaginateCategories(page, category){
-        
-        const { categorias } = category
-
-        console.log(categorias)
-
-        let result = await productModel.paginate({category: categorias}, {limit:4, page, lean:true});
-
-        console.log(result)
-
-        return {
-            code: 202,
-            status: 'success',
-            result
-        }
-
-    }*/
-
     async addProducts (item){
 
         const {title, description, price, stock, category} = item

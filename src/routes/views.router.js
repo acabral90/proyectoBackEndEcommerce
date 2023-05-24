@@ -19,27 +19,6 @@ router.get('/chat', async (req, res)=>{
     return res.render('products', {arrayProducts, style:'style.css'})
 })*/
 
-/*router.get('/products', async (req, res)=>{
-
-    const { page = 1 } = req.query; 
-
-    const { result, code, status } = await manager.getProductsPaginate(page);
-
-    const { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result
-
-    return  res.render( 'products', {
-        status: status,
-        docs,
-        hasNextPage,
-        hasPrevPage,
-        page,
-        prevPage,
-        nextPage,
-        style: 'style.css'
-
-    })
-})*/
-
 router.get('/products', async (req, res)=>{
 
     const category = req.query;
@@ -71,34 +50,6 @@ router.get('/products', async (req, res)=>{
 
     })
 })
-
-/*router.get('/products/categories', async (req, res)=>{
-
-    const category = req.query;
-
-    const { page = 1 } = req.query; 
-
-    //console.log(category)
-
-    let { result, code, status } = await manager.getProductsPaginateCategories(page, category);
-
-    //console.log(result)
-
-    let { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result
-
-    return  res.render( 'products', {
-        status: status,
-        docs,
-        hasNextPage,
-        hasPrevPage,
-        page,
-        prevPage,
-        nextPage,
-        categoryExist: category.categorias === 'camisetas',
-        style: 'style.css'
-
-    })
-})*/
 
 router.post('/products', async (req, res)=>{
 

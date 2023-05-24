@@ -38,6 +38,17 @@ router.post('/:cid/product/:pid', async (req, res)=>{
 
 });
 
+router.delete('/:cid', async (req, res)=>{
+    const cid = req.params.cid
+
+    const respuesta = await cartManager.clearProductsInCart(cid);
+
+    res.send({
+        status: 'success',
+        respuesta
+    })
+})
+
 router.delete('/:cid/product/:pid', async (req, res)=>{
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -54,11 +65,13 @@ router.get('/', async (req, res)=>{
 
     const respuesta = await cartManager.getCarts();
 
-    const arrayProducts = [...respuesta]
+    const result = JSON.stringify(respuesta, null, '\t')
+
+    console.log(result)
 
     res.render('cart',{
         status: 'success',
-        arrayProducts
+        result
     });
 })
 
