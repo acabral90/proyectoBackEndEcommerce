@@ -74,7 +74,7 @@ const productId = document.querySelector("#productId").textContent.substring(3);
 
 console.log({ productId });
 
-const updateResponse = await fetch(`/api/carts/${currentCartId}/product/${productId}`, { method: "POST" });
+const updateResponse = await fetch(`/${currentCartId}/product/${productId}`, { method: "POST" });
 console.log(updateResponse)
 
 });

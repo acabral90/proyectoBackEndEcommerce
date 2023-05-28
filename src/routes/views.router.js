@@ -90,6 +90,26 @@ router.post('/products', async (req, res)=>{
     })
 })
 
+router.post('/:cid/product/:pid', async (req, res)=>{
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+
+    const result = await cartManager.updateCart(cid, pid);
+
+    const cart = await cartManager.getCarts();
+
+    //console.log(result)
+
+    let products = await manager.getProducts();
+
+    //console.log(products)
+
+    let arrayProducts = [...products]
+
+    res.render('products', {arrayProducts, style:'style.css'})
+
+});
+
 
 router.delete('/products', async (req,res)=>{
     
