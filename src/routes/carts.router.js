@@ -2,6 +2,7 @@ import { Router } from "express";
 import CartManager from "../dao/manager/cartManager.js";
 import ProductManager from "../dao/manager/productManager.js";
 
+
 const router = Router();
 
 const cartManager = new CartManager();
@@ -17,6 +18,18 @@ const productManager = new ProductManager();
     })
 
 });*/
+
+router.get('/', async (req, res)=>{
+
+    const cid = (req.params.cid);
+
+    const respuesta = await cartManager.getCarts();
+
+    res.send({
+        status: 'success',
+        respuesta
+    });
+});
 
 router.post('/:cid/product/:pid', async (req, res)=>{
     const cid = req.params.cid;
@@ -61,31 +74,38 @@ router.delete('/:cid/product/:pid', async (req, res)=>{
     });
 });
 
-router.get('/', async (req, res)=>{
+router.put('/:cid', async (req, res) =>{
+    
+    const cid = req.params.cid;
+    const newCart = req.body;
 
-    const respuesta = await cartManager.getCarts();
+    const cart = await cartManager.getCarts(cid);
 
-    const result = JSON.stringify(respuesta, null, '\t')
-
-    console.log(result)
-
-    res.render('cart',{
-        status: 'success',
-        result
-    });
-})
-
-router.post('/', async (req, res)=>{
-
-    const cid = (req.params.cid);
-
-    const respuesta = await cartManager.getCarts();
+    const updateCart = await cartManager.updateApiCart(cart, newCart);
 
     res.send({
         status: 'success',
-        respuesta
+        cart
     });
-});
 
+})
+
+router.put('/:cid/products/:pid', async (req, res) => {
+
+    const cid = req.params.cid;
+    const pid = req.params.pid; 
+    const newQuantity = req.body;
+
+    const cart = await cartManager.getCarts(cid);
+
+    const updateQuantity = await cartManager.updateProdQuantity(pid, newQuantity, cart);
+
+    res.send({
+        status: 'success',
+        cart
+    })
+
+
+})
 
 export default router;

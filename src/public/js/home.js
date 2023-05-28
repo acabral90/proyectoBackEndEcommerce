@@ -43,6 +43,9 @@ Socket.on('messageLogs', data =>{
     log.innerHTML = messages
 })*/
 
+
+
+
 //Funcion del evento para agregar un producto al carrito
 
 let currentCartId = null;
@@ -55,16 +58,16 @@ event.preventDefault();
 
 if (!currentCartId) {
 
-const cartResponse = await fetch("api/carts", { method: "POST" });
+    const cartResponse = await fetch("api/carts", { method: "GET" });
 
-const cartData = await cartResponse.json();
-
-console.log(cartData)
-
-currentCartId = cartData.respuesta[0]._id
-
-console.log( {currentCartId} );
-
+    const cartData = await cartResponse.json();
+    
+    console.log(cartData)
+    
+    currentCartId = cartData.respuesta[0]._id
+    
+    console.log( {currentCartId} );
+    
 }
 
 const productId = document.querySelector("#productId").textContent.substring(3);
@@ -75,3 +78,4 @@ const updateResponse = await fetch(`/api/carts/${currentCartId}/product/${produc
 console.log(updateResponse)
 
 });
+

@@ -1,23 +1,15 @@
 import { Router } from "express";
-import productModel from "../dao/models/products.js";
 import ProductManager from "../dao/manager/productManager.js";
+import CartManager from "../dao/manager/cartManager.js";
  
 const router = Router();
 
 const manager = new ProductManager();
+const cartManager = new CartManager();
 
 router.get('/chat', async (req, res)=>{
     res.render('chat', {})
 })
-
-/*router.get('/products', async (req,res)=>{
-
-    let products = await manager.getProducts();
-
-    let arrayProducts = [...products]
-    
-    return res.render('products', {arrayProducts, style:'style.css'})
-})*/
 
 router.get('/products', async (req, res)=>{
 
@@ -49,6 +41,24 @@ router.get('/products', async (req, res)=>{
         style: 'style.css'
 
     })
+})
+
+router.get('/carts', async (req, res)=>{
+
+    const cid = req.params.cid;
+
+    const respuesta = await cartManager.getCarts();
+
+    //const result = JSON.stringify(respuesta, null, '\t')
+
+    const cart = respuesta[0];
+
+    res.render('cart',{
+        status: 'success',
+        cart,
+        style: 'style.css'
+
+    });
 })
 
 router.post('/products', async (req, res)=>{

@@ -8,50 +8,67 @@ export default class CartManager{
         return cart
     }
 
-    async getCarts(){
+    async getCarts(cid){
 
-        const carts = await cartModel.find().populate('products.product');
-
-        return carts
-    }
-
-    async getCartsById(cid){
-        const cart = await cartModel.findOne({_id:cid});
-
-        return cart
+        if(cid){
+        return await cartModel.find({_id:cid}).lean().populate('products.product');
+        }else{
+        return await cartModel.find().lean().populate('products.product');
+        }       
+        
     }
 
     async updateCart(cid, pid){
-
-        console.log(cid, pid)
  
-        const cart = await cartModel.findOne({_id:cid});
+        const cart = await cartModel.find({_id:cid}).lean().populate('products.product');
 
-        console.log(cart)
+        console.log(cart[0])
 
-        const prodIndex = cart.products.findIndex(u=>u._id == pid);
+        const prodIndex = cart[0].products.findIndex(product => product.product._id == pid)
 
         console.log(prodIndex)
 
         if (prodIndex === -1){
             const product = {
-                _id: pid,
+                product: pid,
                 quantity: 1
             }
-            cart.products.push(product);
+            cart[0].products.push(product);
         } 
         else {
-            let total = cart.products[prodIndex].quantity;
-            cart.products[prodIndex].quantity = total + 1;
+            let total = cart[0].products[prodIndex].quantity;
+            cart[0].products[prodIndex].quantity = total + 1;
         }
 
-        const result = await cartModel.updateOne({_id:cid}, {$set:cart})
+        const newCart = await cartModel.updateOne({_id:cid}, {$set:cart[0]})
 
+        console.log(newCart)
         
-
-        return cart
+        return newCart
         
     };
+
+    async updateApiCart(cart, newCart){
+
+        cart[0].products = [];
+
+        cart[0].products.push(newCart)
+
+        const result = await cartModel.updateOne({_id:cart[0]._id}, {$set:cart[0]})
+
+        return result        
+    }
+
+    async updateProdQuantity(pid, newQuantity, cart){
+
+        const prodIndex = cart[0].products.findIndex(product => product.product._id == pid)
+
+        cart[0].products[prodIndex].quantity = newQuantity.quantity 
+ 
+        const result = await cartModel.updateOne({_id:cart[0]._id}, {$set:cart[0]})
+
+        return result
+    }
 
     async deleteProductCart(cid, pid){
  
