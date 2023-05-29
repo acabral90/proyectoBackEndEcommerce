@@ -19,9 +19,9 @@ const productManager = new ProductManager();
 
 });*/
 
-router.get('/', async (req, res)=>{
+//Todos los endpoints que pide la consigna: GET, DELETE (x2) y PUT (x2)
 
-    const cid = (req.params.cid);
+router.get('/', async (req, res)=>{
 
     const respuesta = await cartManager.getCarts();
 
@@ -55,6 +55,7 @@ router.delete('/:cid/product/:pid', async (req, res)=>{
         respuesta
     });
 });
+
 
 router.put('/:cid', async (req, res) =>{
     

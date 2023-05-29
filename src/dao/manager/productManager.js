@@ -58,29 +58,19 @@ export default class ProductManager {
 
         }else{
             
-            const product = await productModel.create(item);
+            const result = await productModel.create(item);
             
-            return product
+            return{
+                code: 202,
+                status: 'success',
+                result
+            }
         } 
 
     }
 
     updateProduct = async (product) =>{
-        const {title, description, price, stock, id} = product
-
-        if(!id){
-            let alert = Swal.fire({
-                        title: 'Custom animation with Animate.css',
-                        showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                        },
-                        hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                        }
-                    })
-
-            return alert 
-        }
+        const {title, description, price, stock, id, category} = product
 
         const dbProduct = await productModel.findById({_id: id}).lean();
 
@@ -92,21 +82,41 @@ export default class ProductManager {
             dbProduct.price = price;
         }if(stock){
             dbProduct.stock = stock;
+        }if(category){
+            dbProduct.category = category
         }
 
-        const item = await productModel.updateOne({_id: id}, dbProduct);
+        const result = await productModel.updateOne({_id: id}, dbProduct);
             
-        return item
+        return {
+            code:202,
+            status: 'success',
+            result
+        }
            
-    }
+    };
 
     deleteProduct = async (productId) =>{
 
-        console.log(productId._method)
+        if(productId._method){
 
-        const result = await productModel.deleteOne({_id: productId._method})
+            const result = await productModel.deleteOne({_id: productId._method});
 
-        return result 
-    }
+            return {
+                code:202,
+                status: 'success',
+                result
+            }
+        }else if(productId._id){
+
+            const result = await productModel.deleteOne({_id: productId._id})
+
+            return {
+                code:202,
+                status: 'success',
+                result
+            }
+        }
+    };
 
 }

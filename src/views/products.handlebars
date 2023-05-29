@@ -77,50 +77,5 @@
     </form>
 </div>
 
-<div class="dltProduct-container">
-    <h1 Eliminar class="dltProduct-title">Eliminar Productos</h1>
-    <br>
-    <form class="dltProduct-form" action="/realtimeproducts?_method=delete" method="POST">
-        <label>Id del producto</label>
-        <input type="search" name="_method">
-
-        <input type="submit">
-    </form>
-</div>
-
-<div class="updProduct-container">
-    <h1 class="updProduct-title">Editar producto</h1>
-    <br>
-    <form class="updProduct-form" action="/realtimeproducts?_method=put" method="POST">
-    
-        <div class="updFormLabels">
-            <label>ID del producto</label>
-            <input type="search" name="id" >
-        </div>
-
-        <div class="updFormLabels">
-            <label>Nuevo nombre</label>
-            <input type="search" name="title">
-        </div>
-
-        <div class="updFormLabels">
-            <label></label>Nueva descripcion</label>
-            <input type="search" name="description">
-        </div>
-
-        <div class="updFormLabels">
-            <label>Nuevo precio</label>
-            <input type="number" name="price">
-        </div>
-
-        <div class="updFormLabels">
-            <label>Nuevo stock</label>
-            <input type="number" name="stock">
-        </div>
-
-        <input type="submit">
-    </form>
-</div>
-
 <script src="/socket.io/socket.io.js"></script>
 <script type="module" src="js/home.js"></script>

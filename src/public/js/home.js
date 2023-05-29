@@ -54,28 +54,31 @@ const addToCartButton = document.querySelector("#addToCart");
 
 addToCartButton.addEventListener("click", async (event) => {
 
-event.preventDefault();
+    event.preventDefault();
 
-if (!currentCartId) {
+    console.log(event)
 
-    const cartResponse = await fetch("api/carts", { method: "GET" });
+    if (!currentCartId) {
 
-    const cartData = await cartResponse.json();
-    
-    console.log(cartData)
-    
-    currentCartId = cartData.respuesta[0]._id
-    
-    console.log( {currentCartId} );
-    
-}
+        const cartResponse = await fetch("api/carts", { method: "GET" });
 
-const productId = document.querySelector("#productId").textContent.substring(3);
+        const cartData = await cartResponse.json();
+        
+        console.log(cartData)
+        
+        currentCartId = cartData.respuesta[0]._id
+        
+        console.log( {currentCartId} );
+        
+    }
 
-console.log({ productId });
 
-const updateResponse = await fetch(`/${currentCartId}/product/${productId}`, { method: "POST" });
-console.log(updateResponse)
+    const productId = document.querySelector("#productId").textContent.substring(3);
+
+    console.log({ productId });
+
+    const updateResponse = await fetch(`/${currentCartId}/product/${productId}`, { method: "PUT" });
+    console.log(updateResponse)
 
 });
 

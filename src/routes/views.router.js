@@ -90,57 +90,19 @@ router.post('/products', async (req, res)=>{
     })
 })
 
-router.post('/:cid/product/:pid', async (req, res)=>{
+router.put('/:cid/product/:pid', async (req, res)=>{
     const cid = req.params.cid;
     const pid = req.params.pid;
 
     const result = await cartManager.updateCart(cid, pid);
 
-    const cart = await cartManager.getCarts();
+    const cart = await cartManager.getCarts(cid);
 
-    //console.log(result)
-
-    let products = await manager.getProducts();
-
-    //console.log(products)
-
-    let arrayProducts = [...products]
-
-    res.render('products', {arrayProducts, style:'style.css'})
-
+    res.status(200).send({
+        status: 'success',
+        payload: cart
+    })
+   
 });
-
-
-router.delete('/products', async (req,res)=>{
-    
-    const product = req.body;
-
-    console.log(product)
-
-    let productoEliminado = await manager.deleteProduct(product)
-
-    let products = await manager.getProducts();
-
-    let arrayProducts = [...products]
-    
-    res.render('products', {arrayProducts, style:'style.css'})
-
-})
-
-router.put('/products', async (req,res)=>{
-
-    const product = req.body;
-
-    console.log(product)
-
-    let productUpdated = await manager.updateProduct(product)
-
-    let products = await manager.getProducts();
-
-    let arrayProducts = [...products]
-
-    res.render('products', {arrayProducts, style:'style.css'})
-
-})
 
 export default router 

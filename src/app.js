@@ -8,6 +8,7 @@ import { Server, Socket } from "socket.io";
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
+import productsRouter from "./routes/products.router.js"
 
 import  methodOverride  from "method-override";
 
@@ -34,7 +35,8 @@ app.set('view engine', 'handlebars');
 
 
 app.use('/', viewRouter);
-app.use('/api/carts', cartsRouter)
+app.use('/api/carts', cartsRouter);
+app.use('/api/products', productsRouter);
 
 const server =  app.listen(PORT, ()=>{
     console.log(`servidor funcionando en el puerto: ${PORT}`)
