@@ -7,10 +7,12 @@ const router = Router();
 const manager = new ProductManager();
 const cartManager = new CartManager();
 
+//Ruta del chat
 router.get('/chat', async (req, res)=>{
     res.render('chat', {})
 })
 
+//Rutas de productos
 router.get('/products', async (req, res)=>{
 
     const category = req.query;
@@ -41,8 +43,41 @@ router.get('/products', async (req, res)=>{
         style: 'style.css'
 
     })
+});
+
+router.post('/products', async (req, res)=>{
+
+    const product = req.body;
+
+    let addItem = await manager.addProducts(product)
+
+    const { page = 1 } = req.query; 
+
+    //console.log(products)
+
+    const { result, hasPrevPage, hasNextPage, prevPage, nextPage, code, status } = await manager.getProductsPaginate();
+
+    const products = result.docs
+
+    //console.log(result)
+
+
+
+    return  res.render( 'products', {
+        status: status,
+        products,
+        hasNextPage,
+        hasPrevPage,
+        page,
+        prevPage,
+        nextPage,
+        style: 'style.css',
+        user: req.session.user
+
+    })
 })
 
+//Ruta de carrito
 router.get('/carts', async (req, res)=>{
 
     const cid = req.params.cid;
@@ -61,34 +96,7 @@ router.get('/carts', async (req, res)=>{
     });
 })
 
-router.post('/products', async (req, res)=>{
 
-    const product = req.body;
-
-    let addItem = await manager.addProducts(product)
-
-    const { page = 1 } = req.query; 
-
-    //console.log(products)
-
-    const { result, hasPrevPage, hasNextPage, prevPage, nextPage, code, status } = await manager.getProductsPaginate();
-
-    const products = result.docs
-
-    //console.log(result)
-
-    return  res.render( 'products', {
-        status: status,
-        products,
-        hasNextPage,
-        hasPrevPage,
-        page,
-        prevPage,
-        nextPage,
-        style: 'style.css'
-
-    })
-})
 
 router.put('/:cid/product/:pid', async (req, res)=>{
     const cid = req.params.cid;
@@ -104,5 +112,22 @@ router.put('/:cid/product/:pid', async (req, res)=>{
     })
    
 });
+
+//Rutas de login
+router.get('/register', (req,res)=>{
+    res.render('register',{
+        style:'style.css'
+    })
+})
+
+router.get('/', async (req,res)=>{
+    res.render('login')
+})
+
+router.get('/profile', (req,res)=>{
+    res.render('profile',{
+        user: req.session.user
+    })
+})
 
 export default router 
