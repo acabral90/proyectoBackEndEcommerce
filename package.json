@@ -8,8 +8,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^7.1.0",
     "mongoose-paginate-v2": "^1.7.1",
-    "socket.io": "^4.6.1",
-    "sweetalert2": "^11.7.5"
+    "socket.io": "^4.6.1"
   },
   "name": "proyectoconwebsocket",
   "version": "1.0.0",

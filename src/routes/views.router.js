@@ -12,7 +12,6 @@ router.get('/chat', async (req, res)=>{
     res.render('chat', {})
 })
 
-//Rutas de productos
 router.get('/products', async (req, res)=>{
 
     const category = req.query;
@@ -31,6 +30,9 @@ router.get('/products', async (req, res)=>{
 
     //console.log(pid)
 
+    const user = req.session.user.name
+    const admin = req.session.user.email.substring(0,5) == 'admin'
+
     return  res.render( 'products', {
         status: status,
         docs,
@@ -40,7 +42,9 @@ router.get('/products', async (req, res)=>{
         prevPage,
         nextPage,
         categoryExist: category.categorias === 'camisetas',
-        style: 'style.css'
+        style: 'style.css',
+        user,
+        admin
 
     })
 });
@@ -59,9 +63,6 @@ router.post('/products', async (req, res)=>{
 
     const products = result.docs
 
-    //console.log(result)
-
-
 
     return  res.render( 'products', {
         status: status,
@@ -71,9 +72,7 @@ router.post('/products', async (req, res)=>{
         page,
         prevPage,
         nextPage,
-        style: 'style.css',
-        user: req.session.user
-
+        style: 'style.css'
     })
 })
 

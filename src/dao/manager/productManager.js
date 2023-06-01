@@ -1,5 +1,5 @@
 import productModel from "../models/products.js";
-import Swal from "sweetalert2";
+
 
 
 export default class ProductManager {
