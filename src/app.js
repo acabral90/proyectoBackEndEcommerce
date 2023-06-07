@@ -4,12 +4,14 @@ import MongoStore from "connect-mongo";
 import handlebars from 'express-handlebars';
 import { Server, Socket } from "socket.io";
 import session from "express-session";
+import passport from "passport";
 
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
 import sessionRouter from "./routes/session.router.js"
+import initializePassport from "./config/passport.config.js";
 
 import  methodOverride  from "method-override";
 
@@ -35,6 +37,10 @@ app.use(session({
     resave:false,
     saveUninitialized:false
 }))
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');

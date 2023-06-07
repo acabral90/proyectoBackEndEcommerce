@@ -1,42 +1,40 @@
 import { Router } from 'express';
 import userModel from '../dao/models/user.js';
+import passport from 'passport';
 
 const router = Router();
 
-router.post('/register', async (req, res) =>{
+router.post('/register', passport.authenticate('register', { failureRedirect:'/failRegister'} ),async (req, res) =>{
 
-    const {first_name, last_name, email, age, password} = req.body;
-
-    console.log(req.body)
-
-    const exist = await userModel.findOne({email});
-    if(exist){
-        return res.status(400).send({status:"error", error:"User already exists"});
-    }
-    const user = {
-        first_name, last_name, email, age, password
-    };
-
-    const result = await userModel.create(user);
     res.send({status:"success", message:"User registered"});
 
 })
 
-router.post('/', async (req,res)=>{
-    const { email, password } = req.body;
-    const user = await userModel.findOne({email,password})
+router.get('/failregister', async (req,res)=>{
+    console.log('Fallo en el registro');
+    res.send({error: 'Error en el registro'})
+})
 
-    if(!user){
-        return res.status(400).send({status:"error", error:"Datos incorrectos"})
-    }
-  
+router.post('/', passport.authenticate('login',{failureRedirect:'/faillogin'}), async (req,res)=>{
+
+    if(!req.user) return res.status(400).send({status:"error", error: 'Invalid credentials'});
+
     req.session.user = {
-        name: `${user.first_name} ${user.last_name}`,
-        email: user.email,
-        age: user.age
+        first_name : req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email
     }
-    res.send({status:"success", payload:req.res.user, message:"Primer logueo!!"})
-    
+
+
+    res.send({status:"success", payload:req.user, message:"Primer logueo!!"})
+})
+
+router.get('/faillogin', async (req,res)=>{
+
+    console.log('Fallo en el ingreso');
+    res.send({error: 'Error en el ingreso'})
+
 })
 
 router.get('/logout', (req,res)=>{
@@ -44,6 +42,15 @@ router.get('/logout', (req,res)=>{
         if(err) return res.status(500).send({status:"error", error:"No pudo cerrar sesion"})
         res.redirect('/');
     })
+})
+
+router.get('/github', passport.authenticate('github', {scope:['user:email']}), async (req,res)=>{})
+
+router.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/'}), async (req,res)=>{
+
+    req.session.user = req.user;
+    res.redirect('/')
+
 })
 
 export default router;
