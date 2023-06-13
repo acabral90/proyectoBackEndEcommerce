@@ -17,4 +17,5 @@ form.addEventListener('submit', e=>{
         }
     }).then(result=>result.json()).then(json =>console.log(json))
     form.reset();
+    window.location.replace('/')
 })

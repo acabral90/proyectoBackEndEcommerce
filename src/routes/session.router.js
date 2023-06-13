@@ -45,7 +45,7 @@ router.post('/register', passport.authenticate('register', { failureRedirect:'/f
 
 })
 
-router.post('/', passport.authenticate('login',{failureRedirect:'/faillogin'}), async (req,res)=>{
+router.post('/', passport.authenticate('login'), async (req,res)=>{
 
     if(!req.user) return res.status(400).send({status:"error", error: 'Invalid credentials'});
 

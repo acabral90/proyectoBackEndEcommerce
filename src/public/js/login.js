@@ -1,5 +1,3 @@
-
-
 const form = document.getElementById("loginForm");
 
 form.addEventListener('submit', e =>{
@@ -20,7 +18,8 @@ form.addEventListener('submit', e =>{
     }).then(result=>{
         if(result.status == 200){
             window.location.replace('/products')
-        }else if(result.status == 400){
+        }else{
+            console.log('datos incorrectos')
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
