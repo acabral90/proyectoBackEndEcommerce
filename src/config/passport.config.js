@@ -46,7 +46,7 @@ const initializePassport = () => {
 
         try {
            const user = await userService.findOne({email:username})
-           //console.log(user);
+           console.log(user);
             if(!user){
                 console.log('No existe el usuario');
                 return done(null, false);

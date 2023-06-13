@@ -7,6 +7,7 @@ const router = Router();
 const manager = new ProductManager();
 const cartManager = new CartManager();
 
+//middlewares
 const publicAccess = (req,res,next) =>{
     if(req.session.user) return res.redirect('/products');
     next();
@@ -122,7 +123,7 @@ router.get('/', publicAccess, async (req,res)=>{
     res.render('login')
 })
 
-router.get('/profile', privateAccess, (req,res)=>{
+router.get('/profile', (req,res)=>{
     console.log(req.session.user)
     res.render('profile',{
         user: req.session.user,
