@@ -10,7 +10,7 @@ import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
-import sessionRouter from "./routes/session.router.js"
+import sessionRouter from "./routes/authentication.router.js"
 import initializePassport from "./config/passport.config.js";
 
 import  methodOverride  from "method-override";
