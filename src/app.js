@@ -12,14 +12,15 @@ import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
 import sessionRouter from "./routes/authentication.router.js"
 import initializePassport from "./config/passport.config.js";
+import { options } from "./config/options.config.js";
 
 import  methodOverride  from "method-override";
 
 import ChatManager from "./dao/manager/chatManager.js";
  
 const DB = 'test';
-const PORT = 8080;
-const MONGO = 'mongodb+srv://acabral:acabral@cluster0.sx9b4ns.mongodb.net/' + DB;
+const PORT = options.server.port;
+const MONGO = options.mongoDB.url + DB;
 
 const app = express();
 const connection = mongoose.connect(MONGO);
@@ -33,7 +34,7 @@ app.use(session({
         mongoUrl: MONGO,
         ttl:33600
     }),
-    secret:'LaScaloneta',
+    secret: options.server.secretSession,
     resave:false,
     saveUninitialized:false
 }))

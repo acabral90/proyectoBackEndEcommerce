@@ -82,3 +82,16 @@ addToCartButton.addEventListener("click", async (event) => {
 
 });
 
+
+//Evento para el modal 
+
+const btnModal = document.querySelector('#user-menu-button')
+const modal = document.querySelector('#modal')
+
+btnModal.addEventListener('click', (e)=>{
+
+    console.log(e)
+
+    modal.style.overflow = "visible"
+})
+
