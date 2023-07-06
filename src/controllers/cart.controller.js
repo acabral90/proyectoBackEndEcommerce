@@ -94,7 +94,7 @@ export const purchaserCartController = async (req, res) => {
                     })
                     total += cartProduct.quantity*productDB.price;
                     const deletedProduct = await cartManager.deleteProductCart(cartId, cartProduct.product._id)
-                    console.log(deletedProduct)
+                    //console.log(deletedProduct)
                 }else{
                     rejectedProducts.push({
                         productID: cartProduct.product._id,
@@ -113,7 +113,7 @@ export const purchaserCartController = async (req, res) => {
             }
             
             const ticketCreated = await ticketModel.create(newTicket);
-            await cartModel.updateOne({_id:cartId},cart[0] );
+            
             res.send(ticketCreated)
 
         }else{
