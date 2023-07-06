@@ -1,4 +1,5 @@
 import passport from 'passport';
+import { userRepoService } from '../repository/index.js';
 
 export const failRegisterController = async (req,res)=>{
     
@@ -21,10 +22,13 @@ export const logoutController = (req,res)=>{
 };
 
 export const currentController = async (req, res)=>{
-
-    console.log(req.session.user)
-
-    res.send({payload: req.session.user})
+    try{
+        console.log(req.session.user)
+    const user = await userRepoService.getUserRepository(req.session.user);
+    res.send({status: 'success', payload: user})
+    }catch (error){
+        res.send({status: 'error', error: 'Error al buscar usuario'})
+    }
 };
 
 export const passportGithubController = passport.authenticate('github', {scope:['user:email']});

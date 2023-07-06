@@ -63,23 +63,20 @@ const initializePassport = () => {
     passport.use('github', new GitHubStrategy({
         clientID: 'Iv1.082f639bfb951b1a',
         clientSecret:'caa111e3e85d87f77db4a74840f5866ea0082b62',
-        callbackURL: 'http://localhost:8080/api/session/githubcallback'
+        callbackURL: 'http://localhost:8080/api/session/githubcallback',
+        scope: ["user:email"],
 
     }, async (accessToken, refreshToken,profile,done)=>{
         try {
-            
             console.log(profile); 
-
-            let user = await userService.findOne({email: profile._json.email})
+            const email = profile.emails[0].value
+            const user = await userService.findOne({ email })
             if(!user){
-
-                const email = profile._json.email == null ?  profile._json.username : null;
-
                 const newUser = {
                         first_name: profile._json.name,
                         last_name:'',
                         email: email,
-                        age: 18,
+                        age: profile._json.age,
                         password: '',
                 }
                 const result = await userService.create(newUser);

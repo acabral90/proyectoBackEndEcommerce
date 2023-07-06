@@ -7,19 +7,9 @@ import { getCartController,
         registerController,
         updateCartController
 } from "../controllers/views.controller.js";
+import { privateAccess, publicAccess } from "../middlewares/middlewares.js";
  
 const router = Router();
-
-//middlewares
-const publicAccess = (req,res,next) =>{
-    if(req.session.user) return res.redirect('/products');
-    next();
-}
-
-const privateAccess = (req,res,next)=>{
-    if(!req.session.user) return res.redirect('/');
-    next();
-}
 
 //Ruta del chat
 router.get('/chat', getChatController)

@@ -50,48 +50,54 @@ Socket.on('messageLogs', data =>{
 
 let currentCartId = null;
 
-const addToCartButton = document.querySelector("#addToCart");
+const addToCartButton = document.querySelectorAll("#addToCart");
 
-addToCartButton.addEventListener("click", async (event) => {
+addToCartButton.forEach((button) =>{
+    button.addEventListener("click", async (event) =>{ 
+        event.preventDefault();
 
-    event.preventDefault();
+        const card = event.target.parentNode.parentNode
 
-    console.log(event)
+        if (!currentCartId) {
 
-    if (!currentCartId) {
-
-        const cartResponse = await fetch("api/carts", { method: "GET" });
-
-        const cartData = await cartResponse.json();
+            const cartResponse = await fetch("api/carts", { method: "GET" });
+            const cartData = await cartResponse.json();
         
-        console.log(cartData)
+            console.log(cartData)
         
-        currentCartId = cartData.respuesta[0]._id
+            currentCartId = cartData.respuesta[0]._id
         
-        console.log( {currentCartId} );
+            console.log( {currentCartId} );
         
-    }
+        }
 
+        const productId = card.querySelector("#productId").textContent.substring(3);
 
-    const productId = document.querySelector("#productId").textContent.substring(3);
+        console.log({ productId });
 
-    console.log({ productId });
-
-    const updateResponse = await fetch(`/${currentCartId}/product/${productId}`, { method: "PUT" });
-    console.log(updateResponse)
-
+        const updateResponse = await fetch(`/${currentCartId}/product/${productId}`, { method: "PUT" });
+    
+        console.log(updateResponse)
+    });
 });
 
+//Funcion para sumar los precios de los productos del carrito
 
-//Evento para el modal 
+let precios = document.querySelectorAll('#productPrice')
+let total = 0        
+let subtotal = document.querySelector('#subtotal')
 
-const btnModal = document.querySelector('#user-menu-button')
-const modal = document.querySelector('#modal')
-
-btnModal.addEventListener('click', (e)=>{
-
-    console.log(e)
-
-    modal.style.overflow = "visible"
+precios.forEach((precio)=>{
+    const valor = parseInt(precio.innerHTML.substring(1))
+    total += valor 
 })
+
+subtotal.innerHTML = total
+
+
+
+
+
+
+
 

@@ -11,7 +11,7 @@ export default class CartManager{
     async getCarts(cid){
 
         if(cid){
-        return await cartModel.find({_id:cid}).lean().populate('products.product');
+        return await cartModel.findOner({_id:cid}).lean().populate('products.product');
         }else{
         return await cartModel.find().lean().populate('products.product');
         }       
@@ -73,9 +73,9 @@ export default class CartManager{
     async deleteProductCart(cid, pid){
  
         const cart = await cartModel.findOne({_id:cid})
-
-        const productIndex = cart.products.findIndex(product => product._id === pid);
-
+        
+        const productIndex = cart.products.findIndex(product => product.product == pid);
+        console.log(cid, pid)
         if (productIndex === -1){
     
         } 
