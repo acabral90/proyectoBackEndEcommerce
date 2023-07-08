@@ -5,7 +5,8 @@ const manager = new ProductManager();
 const cartManager = new CartManager();
 
 export const getChatController = async (req, res)=>{
-    res.render('chat', {})
+    const user = req.session.user.first_name
+    res.render('chat', {user, style: 'style.css'})
 };
 
 export const getProductsController = async (req, res)=>{

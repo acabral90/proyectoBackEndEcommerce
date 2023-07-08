@@ -7,26 +7,28 @@ import { getCartController,
         registerController,
         updateCartController
 } from "../controllers/views.controller.js";
-import { privateAccess, publicAccess } from "../middlewares/middlewares.js";
+import { checkRole } from "../middlewares/middlewares.js";
+import { passportLoginController } from "../controllers/auth.controller.js";
+
  
 const router = Router();
 
 //Ruta del chat
-router.get('/chat', getChatController)
+router.get('/chat', checkRole(["user"]), getChatController)
 
 //Ruta de productos
-router.get('/products', privateAccess, getProductsController);
+router.get('/products', getProductsController);
 
 //Ruta de carrito
-router.get('/carts', privateAccess, getCartController)
+router.get('/carts', checkRole(["user"]), getCartController)
 
-router.put('/:cid/product/:pid', updateCartController);
+router.put('/:cid/product/:pid', checkRole(["user"]), updateCartController);
 
 //Rutas de login
-router.get('/register', publicAccess, registerController)
+router.get('/register', registerController)
 
-router.get('/', publicAccess, loginController)
+router.get('/', loginController)
 
-router.get('/profile', privateAccess, profileController)
+router.get('/profile', profileController)
 
 export default router 

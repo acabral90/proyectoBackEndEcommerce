@@ -75,7 +75,7 @@ export default class CartManager{
         const cart = await cartModel.find({_id:cid}).lean().populate('products.product');
         //console.log(cart[0].products)
         const productIndex = cart[0].products.findIndex(product => product.product._id.equals(pid));
-        console.log(productIndex)
+        //console.log(productIndex)
         if (productIndex === -1){
     
         } 
@@ -83,9 +83,9 @@ export default class CartManager{
             
             cart[0].products.splice(productIndex,1)
         }
-        console.log(cart[0])
+        //console.log(cart[0])
         const result = await cartModel.updateOne({_id:cart[0]._id}, {$set:cart[0]})
-        console.log(result)
+        //console.log(result)
         return result
 
     };

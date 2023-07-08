@@ -4,16 +4,17 @@ import { getProductsController,
     deleteProductController,
     updateProductController 
 } from "../controllers/product.controller.js";
+import { checkRole } from "../middlewares/middlewares.js";
 
 const router = Router();
 
 router.get('/', getProductsController);
 
-router.post('/', createProductController);
+router.post('/', checkRole(["admin"]), createProductController);
 
-router.delete('/', deleteProductController);
+router.delete('/', checkRole(["admin"]),deleteProductController);
 
-router.put('/', updateProductController);
+router.put('/', checkRole(["admin"]),updateProductController);
 
 export default router;
 

@@ -1,9 +1,11 @@
-export const publicAccess = (req,res,next) =>{
-    if(req.session.user) return res.redirect('/products');
-    next();
-}
-
-export const privateAccess = (req,res,next)=>{
-    if(!req.session.user) return res.redirect('/');
-    next();
+export const checkRole = (roles)=>{
+    return (req,res,next)=>{
+        if(!req.user){
+            return res.json({status:"error", message:"Necesitas estar autenticado"});
+        }
+        if(!roles.includes(req.user.role)){
+            return res.json({status:"error", message:"No estas autorizado"});
+        }
+        next();
+    }
 }

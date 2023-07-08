@@ -1,4 +1,20 @@
-<div>
+<div id="chatContainer">
+  <div id="menu">
+		<p id="user">{{user}}</p>
+	</div>
+	
+	<div id="messageLogs"></div>
+	
+	<div >
+		<input name="usermsg" type="text" id="chatbox" size="63" />
+		
+		<button type="submit" class="inline-block rounded-full border-2 border-neutral-800 px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-neutral-800 transition duration-150 ease-in-out hover:border-neutral-800 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-neutral-800 focus:border-neutral-800 focus:text-neutral-800 focus:outline-none focus:ring-0 active:border-neutral-900 active:text-neutral-900 dark:border-neutral-900 dark:text-neutral-900 dark:hover:border-neutral-900 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10 dark:hover:text-neutral-900 dark:focus:border-neutral-900 dark:focus:text-neutral-900 dark:active:border-neutral-900 dark:active:text-neutral-900" data-te-ripple-init>
+			Enviar
+			</button>
+	</div>
+</div>
+
+<!---<div>
     <div id="menu">
 		<h1>Chat con websocket y persistencia de archivos con MongoDb</h1>
 		
@@ -8,9 +24,9 @@
 	
 	<div id="messageLogs"></div>
 		
-</div>
+</div>--->
 
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="/socket.io/socket.io.js"></script>
-<!---<script src="js/home.js"></script>
+<script src="/js/chat.js"></script>

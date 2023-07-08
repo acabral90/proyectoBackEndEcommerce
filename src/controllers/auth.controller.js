@@ -36,9 +36,9 @@ export const passportGithubController = passport.authenticate('github', {scope:[
 export const passportGithubCallbackController = passport.authenticate('github',{failureRedirect:'/'});
 
 export const githubCallbackController = async (req,res)=>{
-
+    
     req.session.user = req.user;
-    res.redirect('/')
+    res.redirect('/products')
 
 };
 

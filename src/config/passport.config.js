@@ -82,7 +82,7 @@ const initializePassport = () => {
                 const result = await userService.create(newUser);
                 done(null,result)
             }else{
-                
+                console.log(user)
                 done(null, user)
             }
 

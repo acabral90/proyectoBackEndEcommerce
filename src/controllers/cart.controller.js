@@ -68,7 +68,6 @@ export const updateProductCartController = async (req, res) => {
 }
 
 export const purchaserCartController = async (req, res) => {
-    //console.log(req.session.user)
     try {
         const cartId = req.params.cid;
         const cart = await cartModel.find({_id:cartId}).lean().populate('products.product');
@@ -82,9 +81,7 @@ export const purchaserCartController = async (req, res) => {
 
             for (let i = 0; i < cart[0].products.length; i++) {
                 const cartProduct = cart[0].products[i];
-                const productDB = await productModel.findById(cartProduct.product._id);
-                //console.log(cartProduct)
-                //Comparar la cantidad de los productos
+                const productDB = await productModel.findById(cartProduct.product._id);s
                 
                 if(cartProduct.quantity <= productDB.stock){
                     ticketProducts.push({
@@ -93,14 +90,15 @@ export const purchaserCartController = async (req, res) => {
                       quantity: cartProduct.quantity
                     })
                     total += cartProduct.quantity*productDB.price;
-                    const deletedProduct = await cartManager.deleteProductCart(cartId, cartProduct.product._id)
-                    //console.log(deletedProduct)
+                    const deletedProduct = await cartManager.deleteProductCart(cartId, cartProduct.product._id);
+                    productDB.stock = productDB.stock - cartProduct.quantity;
+                    await productModel.updateOne({_id: productDB._id}, productDB);
+
                 }else{
                     rejectedProducts.push({
                         productID: cartProduct.product._id,
                         quantity: cartProduct.quantity
                     })
-                    //console.log(rejectedProducts)
                 }
             }
             
