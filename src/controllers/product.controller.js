@@ -1,4 +1,7 @@
 import ProductManager from "../dao/manager/productManager.js";
+import { CustomError } from "../services/customError.service.js";
+import { EError } from "../enums/EError.js";
+import { generateProductErrorInfo } from "../services/productErrorInfo.js";
 
 const productManager = new ProductManager();
 
@@ -19,7 +22,19 @@ export const getProductsController = async (req, res)=>{
 export const createProductController = async (req, res) => {
 
     const product = req.body;
+
+    if(!product.title || !product.description || !product.price || !product.stock || !product.category){
+        CustomError.createError({
+            name: "Product create error",
+            cause: generateProductErrorInfo(product),
+            message: "Error creando el producto",
+            errorCode: EError.INVALID_JSON
+        });
+    };
+
     const { result, code, status} = await productManager.addProducts(product)
+
+    
 
     res.send({
         status,

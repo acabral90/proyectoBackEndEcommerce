@@ -6,6 +6,7 @@ import { getProductsController,
 } from "../controllers/product.controller.js";
 import { checkRole } from "../middlewares/middlewares.js";
 
+
 const router = Router();
 
 router.get('/', getProductsController);

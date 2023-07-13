@@ -16,6 +16,7 @@ import initializePassport from "./config/passport.config.js";
 import { options } from "./config/options.config.js";
 
 import  methodOverride  from "method-override";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 import ChatManager from "./dao/manager/chatManager.js";
  
@@ -43,7 +44,6 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
@@ -51,8 +51,10 @@ app.set('view engine', 'handlebars');
 app.use('/', viewRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
+app.use(errorHandler);       
+
 app.use('/api/session', sessionRouter);
-app.use('/api/mockingProducts', mockingRouter);       
+app.use('/api/mockingProducts', mockingRouter);
 
 const server =  app.listen(PORT, ()=>{
     console.log(`servidor funcionando en el puerto: ${PORT}`)
