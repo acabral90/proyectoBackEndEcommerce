@@ -1,7 +1,5 @@
 const form = document.getElementById('registerForm');
 
-
-
 form.addEventListener('submit', e=>{
     if(e.key === 'Enter'){
     e.preventDefault();

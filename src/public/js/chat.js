@@ -3,17 +3,6 @@ const Socket = io();
 
 const chatbox = document.querySelector('#chatbox');
 const user = document.querySelector('#user').textContent
-/*Swal.fire({
-    title: "Identifícate",
-    input: "text",
-    inputValidator: (value) =>{
-        return !value && "Necesita escribir el nombre de usuario para iniciar!"
-    },
-    allowOutsideClick: false,
-    toast: true 
-}).then(result =>{
-    user = result.value;
-})*/
 
 chatbox.addEventListener('keyup', evt =>{
     

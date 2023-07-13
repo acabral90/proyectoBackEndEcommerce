@@ -10,7 +10,8 @@ import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
-import sessionRouter from "./routes/authentication.router.js"
+import sessionRouter from "./routes/authentication.router.js";
+import { mockingRouter } from "./routes/mockingProducts.router.js";
 import initializePassport from "./config/passport.config.js";
 import { options } from "./config/options.config.js";
 
@@ -50,7 +51,8 @@ app.set('view engine', 'handlebars');
 app.use('/', viewRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
-app.use('/api/session', sessionRouter);       
+app.use('/api/session', sessionRouter);
+app.use('/api/mockingProducts', mockingRouter);       
 
 const server =  app.listen(PORT, ()=>{
     console.log(`servidor funcionando en el puerto: ${PORT}`)
