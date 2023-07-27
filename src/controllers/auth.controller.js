@@ -3,29 +3,30 @@ import { userRepoService } from '../repository/index.js';
 
 export const failRegisterController = async (req,res)=>{
     
-    console.log('Fallo en el registro');
+    req.logger.error('Register failed')
     res.send({error: 'Error en el registro'})
 };
 
 export const failLoginController =  async (req,res)=>{
     
-    onsole.log('Fallo en el ingreso');
+    req.logger.error('Login failed')
     res.send({error: 'Error en el ingreso'})
 };
 
 export const logoutController = (req,res)=>{
     
     req.session.destroy(err =>{
-        if(err) return res.status(500).send({status:"error", error:"No pudo cerrar sesion"})
+        if(err) return res.status(500).send({status:"error", error:"No pudo cerrar sesion"});
+        req.logger.info('Session cerrada correctamente');
         res.redirect('/');
     })
 };
 
 export const currentController = async (req, res)=>{
     try{
-        console.log(req.session.user)
-    const user = await userRepoService.getUserRepository(req.session.user);
-    res.send({status: 'success', payload: user})
+        req.logger.info(req.session.user)
+        const user = await userRepoService.getUserRepository(req.session.user);
+        res.send({status: 'success', payload: user})
     }catch (error){
         res.send({status: 'error', error: 'Error al buscar usuario'})
     }
@@ -38,6 +39,7 @@ export const passportGithubCallbackController = passport.authenticate('github',{
 export const githubCallbackController = async (req,res)=>{
     
     req.session.user = req.user;
+    req.logger.info('Login success')
     res.redirect('/products')
 
 };
@@ -46,6 +48,7 @@ export const passportRegisterController = passport.authenticate('register', { fa
 
 export const registerController = async (req, res) =>{
 
+    req.logger.info('User registered')
     res.send({status:"success", message:"User registered"});
 
 };
@@ -60,6 +63,8 @@ export const loginController = async (req,res)=>{
         age: req.user.age,
         email: req.user.email
     }
+
+    req.logger.info('Login success');
 
     res.send({status:"success", payload:req.user, message:"Primer logueo!!"})
 };

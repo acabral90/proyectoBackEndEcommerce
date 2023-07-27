@@ -11,9 +11,11 @@ import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
 import sessionRouter from "./routes/authentication.router.js";
+import { loggerRouter } from "./routes/logger.router.js";
 import { mockingRouter } from "./routes/mockingProducts.router.js";
 import initializePassport from "./config/passport.config.js";
 import { options } from "./config/options.config.js";
+import { addLogger } from "./utils/logger.js";
 
 import  methodOverride  from "method-override";
 import { errorHandler } from "./middlewares/errorHandler.js";
@@ -44,9 +46,12 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
+
+app.use(addLogger)
 
 app.use('/', viewRouter);
 app.use('/api/carts', cartsRouter);
@@ -55,6 +60,7 @@ app.use(errorHandler);
 
 app.use('/api/session', sessionRouter);
 app.use('/api/mockingProducts', mockingRouter);
+app.use('/api/loggerTest', loggerRouter)
 
 const server =  app.listen(PORT, ()=>{
     console.log(`servidor funcionando en el puerto: ${PORT}`)

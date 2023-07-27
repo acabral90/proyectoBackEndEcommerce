@@ -6,66 +6,70 @@ import { generateProductErrorInfo } from "../services/productErrorInfo.js";
 const productManager = new ProductManager();
 
 export const getProductsController = async (req, res)=>{
+    try {
+      const category = req.query;
+      const { page = 1 } = req.query; 
+      let { result, code, status } = await productManager.getProductsPaginate(page, category);
 
-    const category = req.query;
-    //console.log(category)
-    const { page = 1 } = req.query; 
-    let { result, code, status } = await productManager.getProductsPaginate(page, category);
-
-    res.send({
-        status,
-        code,
-        payload: result
-    })
+      res.status(200).send({status, code, payload: result})
+    } catch (error) {
+      req.logger.error('Get product failed')
+      res.status(400).send({payload: error})
+    }
+    
 }
 
 export const createProductController = async (req, res) => {
-
-    const product = req.body;
-
-    if(!product.title || !product.description || !product.price || !product.stock || !product.category){
+    try {
+      const product = req.body;
+   
+      if (!product.title || !product.description || !product.price || !product.stock || !product.category) {
         CustomError.createError({
-            name: "Product create error",
-            cause: generateProductErrorInfo(product),
-            message: "Error creando el producto",
-            errorCode: EError.INVALID_JSON
+          name: "Product create error",
+          cause: generateProductErrorInfo(product),
+          message: "Error creando el producto",
+          errorCode: EError.INVALID_JSON,
         });
-    };
+      }  
+      const { result, code, status } = await productManager.addProducts(product);
+      req.logger.info('Product create success')
+      res.status(200).send({status, code, payload: result})
 
-    const { result, code, status} = await productManager.addProducts(product)
-
-    
-
-    res.send({
-        status,
-        code,
-        payload: result
-    })
-}
+    } catch (error) {
+      res.status(400).send({status: "error", code: error.code, payload: error.cause});
+    }
+  };
 
 export const deleteProductController = async (req,res)=>{
-    
-    const product = req.body;
-    console.log(product)
-    const { code, status, result } = await productManager.deleteProduct(product)
+    try {
+      const product = req.body;
+      req.logger.info(product)
+      const { code, status, result } = await productManager.deleteProduct(product)
+      req.logger.info('Product delete success')
+      res.status(200).send({code, status, payload: result})
 
-    res.send({
-        code,
-        status,
-        payload: result
-    })
+    } catch (error) {
+      req.logger.error('Product delete failed')
+      res.status(400).send({payload: error})
+    }
+   
 }
 
 export const updateProductController =  async (req,res)=>{
 
+  try {
     const product = req.body;
-    console.log(product)
+    req.logger.info(product)
     const { code, status, result } = await productManager.updateProduct(product)
-
-    res.send({
-        code,
-        status,
-        payload: result
-    })
+    req.logger.info('Product update success')
+    res.status(200).send({code, status, payload: result})
+    
+  } catch (error) {
+    req.logger.error('Product update failed')
+    res.status(400).send({code, status, payload: error})
+  }
 }
+
+
+
 

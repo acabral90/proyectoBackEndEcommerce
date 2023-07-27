@@ -14,7 +14,7 @@ const initializePassport = () => {
             try {
                 let user = await userService.findOne({email:username});
                 if(user){
-                    console.log('El usuario ya existe');
+                    req.logger.info('El usuario ya existe');
                     return done(null,false);
                 }
                 const newUser = {
@@ -29,6 +29,7 @@ const initializePassport = () => {
                 return done(null, result);
 
             } catch (error) {
+                req.logger.error('Error al obtener el usuario')
                 return done("Error al obtener el usuario: " + error)
             }
         }
@@ -46,12 +47,13 @@ const initializePassport = () => {
 
         try {
            const user = await userService.findOne({email:username})
-           console.log(user);
+            //req.logger.info(user)
             if(!user){
-                console.log('No existe el usuario');
+                
                 return done(null, false);
             }
             if(!validatePassword(password,user)) return done (null, false);
+            
             return done(null,user);
 
         } catch (error) {
@@ -68,7 +70,7 @@ const initializePassport = () => {
 
     }, async (accessToken, refreshToken,profile,done)=>{
         try {
-            console.log(profile); 
+            
             const email = profile.emails[0].value
             const user = await userService.findOne({ email })
             if(!user){
@@ -82,11 +84,12 @@ const initializePassport = () => {
                 const result = await userService.create(newUser);
                 done(null,result)
             }else{
-                console.log(user)
+                req.logger.info(user)
                 done(null, user)
             }
 
         } catch (error) {
+            
             return done(null,error)
         }
     }))
