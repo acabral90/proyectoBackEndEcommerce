@@ -6,7 +6,7 @@ import { Server, Socket } from "socket.io";
 import session from "express-session";
 import passport from "passport";
 
-import __dirname from "./utils.js";
+import { __dirname } from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
 import productsRouter from "./routes/products.router.js"
@@ -32,7 +32,7 @@ const connection = mongoose.connect(MONGO);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
-app.use(express.static(__dirname+'/public'));
+//app.use(express.static(__dirname+'/public'));
 app.use(session({
     store: new MongoStore({
         mongoUrl: MONGO,

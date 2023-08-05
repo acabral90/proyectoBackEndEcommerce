@@ -1,5 +1,7 @@
 import passport from 'passport';
 import { userRepoService } from '../repository/index.js';
+import { validatePassword, verifyEmailToken } from '../utils.js';
+import { sendRecoveryPass } from '../utils/email.js';
 
 export const failRegisterController = async (req,res)=>{
     
@@ -69,4 +71,47 @@ export const loginController = async (req,res)=>{
     res.send({status:"success", payload:req.user, message:"Primer logueo!!"})
 };
 
-export const passportLoginController = passport.authenticate('login')
+export const passportLoginController = passport.authenticate('login');
+
+export const forgotPasswordController = async (req,res)=>{
+    try {
+        const { email } = req.body;
+        const user = await UserModel.findOne({email:email})
+        if(!user){
+            return res.send(`<div>Error, <a href="/forgot-password">Intente de nuevo</a></div>`)
+        }
+        const token = generateEmailToken(email,3*60);
+        await sendRecoveryPass(email,token);
+        res.send("Se envio un correo a su cuenta para restablecer la contraseña, volver  <a href='/login'>al login</a>")
+    } catch (error) {
+        return res.send(`<div>Error, <a href="/forgot-password">Intente de nuevo</a></div>`)
+    }
+};
+
+export const resetPasswordController = async (req,res)=>{
+    try {
+           const token = req.query.token;
+           const { email,newPassword }=req.body;
+           
+           const validEmail = verifyEmailToken(token) 
+           if(!validEmail){
+            return res.send(`El enlace ya no es valido, genere uno nuevo: <a href="/forgot-password">Nuevo enlace</a>.`)
+           }
+           const user = await UserModel.findOne({email:email});
+           if(!user){
+            return res.send("El usuario no esta registrado.")
+           }
+           if(validatePassword(newPassword,user)){
+            return res.send("No puedes usar la misma contraseña.")
+           }
+           const userData = {
+            ...user._doc,
+            password:createHash(newPassword)
+           };
+           const userUpdate = await UserModel.findOneAndUpdate({email:email},userData);
+           res.render("login",{message:"contraseña actualizada"})
+
+    } catch (error) {
+        res.send(error.message)
+    }
+};

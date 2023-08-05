@@ -1,6 +1,6 @@
 import winston from "winston";
 import * as dotenv from "dotenv";
-import  __dirname from "../utils.js"
+import { __dirname } from "../utils.js"
 import path from "path";
 dotenv.config();
 

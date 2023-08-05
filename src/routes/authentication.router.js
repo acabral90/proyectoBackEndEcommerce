@@ -10,6 +10,8 @@ import { failRegisterController,
         registerController,
         loginController,
         passportLoginController,
+        forgotPasswordController,
+        resetPasswordController
 } from '../controllers/auth.controller.js';
 
 const router = Router();
@@ -29,5 +31,9 @@ router.get('/githubcallback', passportGithubCallbackController, githubCallbackCo
 router.post('/register', passportRegisterController, registerController);
 
 router.post('/', passportLoginController, loginController);
+
+router.post('/forgot-password', forgotPasswordController);
+
+router.post('/reset-password', resetPasswordController);
 
 export default router;
