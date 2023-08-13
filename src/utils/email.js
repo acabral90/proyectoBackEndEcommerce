@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
-import {options} from "../config/options.config.js";
+import { options } from "../config/options.config.js";
 
 const transporter = nodemailer.createTransport({
     service:"gmail",
     port:587,
     auth:{
         user: options.gmail.emailAdmin,
-        pass:options.gmail.emailToken
+        pass: options.gmail.emailPass
     },
     secure:false,
     tls:{
@@ -14,10 +14,11 @@ const transporter = nodemailer.createTransport({
     }
 });
 //Funcion para el envio de correo electronico para recuperar la contraseña
-export const sendRecoveryPass = async(userEmail,token)=>{
+export const sendRecoveryPass = async (userEmail,token)=>{
+    console.log(userEmail, token)
     const link = `http://localhost:8080/reset-password?token=${token}`;
     await transporter.sendMail({
-        from:options.gmail.emailAdmin,
+        from: options.gmail.emailAdmin,
         to:userEmail,
         subject:"Restablecer contraseña",
         html: `

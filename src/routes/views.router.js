@@ -5,10 +5,14 @@ import { getCartController,
         loginController,
         profileController,
         registerController,
-        updateCartController
+        updateCartController,
+        forgotPasswordController,
+        resetPasswordController
 } from "../controllers/views.controller.js";
 import { checkRole } from "../middlewares/middlewares.js";
-import { passportLoginController } from "../controllers/auth.controller.js";
+
+
+
 
  
 const router = Router();
@@ -25,10 +29,15 @@ router.get('/carts', checkRole(["user"]), getCartController)
 router.put('/:cid/product/:pid', checkRole(["user"]), updateCartController);
 
 //Rutas de login
-router.get('/register', registerController)
+router.get('/register', registerController);
 
-router.get('/', loginController)
+router.get('/', loginController);
 
-router.get('/profile', profileController)
+router.get('/profile', profileController);
+
+//Rutas para reestablecer contraseña
+router.get('/forgot-password', forgotPasswordController);
+
+router.get('/reset-password', resetPasswordController);
 
 export default router 

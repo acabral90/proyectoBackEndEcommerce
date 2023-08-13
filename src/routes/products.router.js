@@ -11,11 +11,11 @@ const router = Router();
 
 router.get('/', getProductsController);
 
-router.post('/', checkRole(["admin"]), createProductController);
+router.post('/', checkRole(["admin", "premium"]), createProductController);
 
-router.delete('/', checkRole(["admin"]),deleteProductController);
+router.delete('/', checkRole(["admin", "premium"]),deleteProductController);
 
-router.put('/', checkRole(["admin"]),updateProductController);
+router.put('/', checkRole(["admin", "premium"]),updateProductController);
 
 export default router;
 

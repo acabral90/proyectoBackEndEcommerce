@@ -1,7 +1,8 @@
 import passport from 'passport';
 import { userRepoService } from '../repository/index.js';
-import { validatePassword, verifyEmailToken } from '../utils.js';
-import { sendRecoveryPass } from '../utils/email.js';
+import { generateEmailToken, validatePassword, verifyEmailToken, createHash } from '../utils.js';
+import { sendRecoveryPass } from '../utils/email.js'
+import userModel from '../dao/models/user.js';
 
 export const failRegisterController = async (req,res)=>{
     
@@ -76,28 +77,33 @@ export const passportLoginController = passport.authenticate('login');
 export const forgotPasswordController = async (req,res)=>{
     try {
         const { email } = req.body;
-        const user = await UserModel.findOne({email:email})
+        console.log(email)
+        const user = await userModel.findOne({email:email})
+        req.logger.warning(user)
         if(!user){
-            return res.send(`<div>Error, <a href="/forgot-password">Intente de nuevo</a></div>`)
+            req.logger.warning("El usuario no existe")
+            return res.send(`<div>Error1, <a href="/forgot-password">Intente de nuevo</a></div>`)
         }
-        const token = generateEmailToken(email,3*60);
-        await sendRecoveryPass(email,token);
-        res.send("Se envio un correo a su cuenta para restablecer la contraseña, volver  <a href='/login'>al login</a>")
+        const token = generateEmailToken(email,3600);
+        console.log(token)
+        const sendEmail = await sendRecoveryPass(email,token);
+        console.log(sendEmail)
+        res.send("Se envio un correo a su cuenta para restablecer la contraseña, volver  <a href='/'>al login</a>")
     } catch (error) {
-        return res.send(`<div>Error, <a href="/forgot-password">Intente de nuevo</a></div>`)
+        return res.send(`<div>Error2, <a href="/forgot-password">Intente de nuevo</a></div>`)
     }
 };
 
 export const resetPasswordController = async (req,res)=>{
     try {
            const token = req.query.token;
-           const { email,newPassword }=req.body;
+           const { email, newPassword } = req.body;
            
            const validEmail = verifyEmailToken(token) 
            if(!validEmail){
-            return res.send(`El enlace ya no es valido, genere uno nuevo: <a href="/forgot-password">Nuevo enlace</a>.`)
+            return res.send(`El enlace ya no es válido, genere uno nuevo: <a href="/forgot-password">Nuevo enlace</a>.`)
            }
-           const user = await UserModel.findOne({email:email});
+           const user = await userModel.findOne({email:email});
            if(!user){
             return res.send("El usuario no esta registrado.")
            }
@@ -108,10 +114,30 @@ export const resetPasswordController = async (req,res)=>{
             ...user._doc,
             password:createHash(newPassword)
            };
-           const userUpdate = await UserModel.findOneAndUpdate({email:email},userData);
-           res.render("login",{message:"contraseña actualizada"})
+           const userUpdate = await userModel.findOneAndUpdate({email:email},userData);
+           res.send(`La contraseña se actualizó correctamente. Volver <a href="/">al login</a>`)
 
     } catch (error) {
         res.send(error.message)
     }
 };
+
+export const userPremiumController = async (req, res)=>{
+    try {
+        const userId = req.params.uid;
+        const user = await userModel.findById(userId);
+        const userRol = user.role;
+        if(userRol === "user"){
+            user.role = "premium"
+        } else if(userRol === "premium"){
+            user.role = "user"
+        } else {
+            return res.json({status:"error", message:"no es posible cambiar el role del usuario"});
+        }
+        await userModel.updateOne({_id:user._id},user);
+        res.send({status:"success", message:"rol modificado"});
+    } catch (error) {
+        console.log(error.message);
+        res.json({status:"error", message:"hubo un error al cambiar el rol del usuario"})
+    }
+}

@@ -69,8 +69,7 @@ const initializePassport = () => {
         scope: ["user:email"],
 
     }, async (accessToken, refreshToken,profile,done)=>{
-        try {
-            
+        try {            
             const email = profile.emails[0].value
             const user = await userService.findOne({ email })
             if(!user){

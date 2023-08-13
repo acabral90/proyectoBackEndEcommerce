@@ -73,4 +73,13 @@ export const profileController = (req,res)=>{
     res.render('profile',{
         user: req.session.user,
     })
+};
+
+export const forgotPasswordController = (req, res)=>{
+    res.render('forgotPassword');
+};
+
+export const resetPasswordController = (req, res)=>{
+    const token = req.query.token
+    res.render("resetPassword",{token})
 }

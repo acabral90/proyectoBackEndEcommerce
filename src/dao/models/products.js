@@ -24,7 +24,13 @@ const productsSchema = new mongoose.Schema({
     category:{
         type: String,
         require: true
+    },
+    owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        default: 'admin'
     }
+
 })
 
 productsSchema.plugin(mongoosePaginate);

@@ -22,6 +22,7 @@ export const getProductsController = async (req, res)=>{
 export const createProductController = async (req, res) => {
     try {
       const product = req.body;
+      product.owner = req.user._id
    
       if (!product.title || !product.description || !product.price || !product.stock || !product.category) {
         CustomError.createError({
@@ -44,15 +45,25 @@ export const deleteProductController = async (req,res)=>{
     try {
       const product = req.body;
       req.logger.info(product)
-      const { code, status, result } = await productManager.deleteProduct(product)
-      req.logger.info('Product delete success')
-      res.status(200).send({code, status, payload: result})
-
+      if(product){
+        const productOwer = JSON.parse(JSON.stringify(product.owner));
+        const userId = JSON.parse(JSON.stringify(req.user._id));
+        if((req.user.rol === "premium" && productOwer == userId) || req.user.rol === "admin"){
+          const { code, status, result } = await productManager.deleteProduct(product)
+          req.logger.info('Product delete success')
+          res.status(200).send({code, status, payload: result})
+        }else{
+          req.logger.error('Cannot delete this product')
+          res.status(400).send({payload: 'error'})
+        };
+      }else{
+        req.logger.error('Product does not exist')
+        res.status(400).send({payload: 'error'})
+      };
     } catch (error) {
       req.logger.error('Product delete failed')
       res.status(400).send({payload: error})
-    }
-   
+    }   
 }
 
 export const updateProductController =  async (req,res)=>{

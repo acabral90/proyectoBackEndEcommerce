@@ -11,8 +11,10 @@ import { failRegisterController,
         loginController,
         passportLoginController,
         forgotPasswordController,
-        resetPasswordController
+        resetPasswordController,
+        userPremiumController
 } from '../controllers/auth.controller.js';
+import { checkRole } from '../middlewares/middlewares.js';
 
 const router = Router();
 
@@ -35,5 +37,7 @@ router.post('/', passportLoginController, loginController);
 router.post('/forgot-password', forgotPasswordController);
 
 router.post('/reset-password', resetPasswordController);
+
+router.get('/premium/:uid', checkRole(['admin']), userPremiumController)
 
 export default router;

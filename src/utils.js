@@ -36,9 +36,12 @@ export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 //Email token
 
 export const generateEmailToken = (email, expireTime)=>{
-    const token = jwt.sign({email},options.gmail.emailToken, {expiresIn:expireTime})
+    console.log(email)
+    const token = jwt.sign({email}, options.gmail.emailToken, {expiresIn:expireTime})
+    console.log(token)
     return token
-}
+};
+
 export const verifyEmailToken = (token) =>{
     try {
         const info = jwt.verify(token,options.gmail.emailToken);

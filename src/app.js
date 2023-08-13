@@ -6,6 +6,7 @@ import { Server, Socket } from "socket.io";
 import session from "express-session";
 import passport from "passport";
 
+import { options } from "./config/options.config.js";
 import { __dirname } from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import cartsRouter from "./routes/carts.router.js"
@@ -14,7 +15,6 @@ import sessionRouter from "./routes/authentication.router.js";
 import { loggerRouter } from "./routes/logger.router.js";
 import { mockingRouter } from "./routes/mockingProducts.router.js";
 import initializePassport from "./config/passport.config.js";
-import { options } from "./config/options.config.js";
 import { addLogger } from "./utils/logger.js";
 
 import  methodOverride  from "method-override";
@@ -32,7 +32,7 @@ const connection = mongoose.connect(MONGO);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
-//app.use(express.static(__dirname+'/public'));
+app.use(express.static(__dirname+'/public'));
 app.use(session({
     store: new MongoStore({
         mongoUrl: MONGO,
