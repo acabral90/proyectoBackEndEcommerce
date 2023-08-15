@@ -6,6 +6,7 @@ import { Server, Socket } from "socket.io";
 import session from "express-session";
 import passport from "passport";
 
+
 import { options } from "./config/options.config.js";
 import { __dirname } from "./utils.js";
 import viewRouter from "./routes/views.router.js";
@@ -16,6 +17,8 @@ import { loggerRouter } from "./routes/logger.router.js";
 import { mockingRouter } from "./routes/mockingProducts.router.js";
 import initializePassport from "./config/passport.config.js";
 import { addLogger } from "./utils/logger.js";
+import { swaggerSpecs } from "./config/doc.config.js";
+import swaggerUi from 'swagger-ui-express';
 
 import  methodOverride  from "method-override";
 import { errorHandler } from "./middlewares/errorHandler.js";
@@ -61,6 +64,7 @@ app.use(errorHandler);
 app.use('/api/session', sessionRouter);
 app.use('/api/mockingProducts', mockingRouter);
 app.use('/api/loggerTest', loggerRouter)
+app.use('/api/docs', swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
 
 const server =  app.listen(PORT, ()=>{
     console.log(`servidor funcionando en el puerto: ${PORT}`)

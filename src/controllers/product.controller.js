@@ -10,14 +10,26 @@ export const getProductsController = async (req, res)=>{
       const category = req.query;
       const { page = 1 } = req.query; 
       let { result, code, status } = await productManager.getProductsPaginate(page, category);
-
       res.status(200).send({status, code, payload: result})
+
     } catch (error) {
-      req.logger.error('Get product failed')
-      res.status(400).send({payload: error})
+      req.logger.error('Get products failed')
+      res.status(400).send({status: 'error', payload: error})
     }
+};
+
+export const getProductController = async (req, res) => {
+  try {
+    const productId = req.params.pid;
+    const product = await productManager.getProductById(productId);
+    req.logger.info('Get product success', product)
+    res.status(200).send({status: 'success', payload: product})
     
-}
+  } catch (error) {
+    req.logger.error('Get product failed')
+    res.status(400).send({status: 'error', payload: error})
+  }
+};
 
 export const createProductController = async (req, res) => {
     try {
@@ -43,13 +55,14 @@ export const createProductController = async (req, res) => {
 
 export const deleteProductController = async (req,res)=>{
     try {
-      const product = req.body;
-      req.logger.info(product)
+      const productId = req.params.pid;
+      const product = await productManager.getProductById(productId)
+      
       if(product){
         const productOwer = JSON.parse(JSON.stringify(product.owner));
         const userId = JSON.parse(JSON.stringify(req.user._id));
         if((req.user.rol === "premium" && productOwer == userId) || req.user.rol === "admin"){
-          const { code, status, result } = await productManager.deleteProduct(product)
+          const { code, status, result } = await productManager.deleteProduct(productId)
           req.logger.info('Product delete success')
           res.status(200).send({code, status, payload: result})
         }else{
@@ -60,6 +73,7 @@ export const deleteProductController = async (req,res)=>{
         req.logger.error('Product does not exist')
         res.status(400).send({payload: 'error'})
       };
+
     } catch (error) {
       req.logger.error('Product delete failed')
       res.status(400).send({payload: error})
@@ -69,9 +83,11 @@ export const deleteProductController = async (req,res)=>{
 export const updateProductController =  async (req,res)=>{
 
   try {
-    const product = req.body;
-    req.logger.info(product)
-    const { code, status, result } = await productManager.updateProduct(product)
+    const productId = req.params.pid;
+    const newProduct = req.body
+    
+    req.logger.info(productId)
+    const { code, status, result } = await productManager.updateProduct(productId, newProduct)
     req.logger.info('Product update success')
     res.status(200).send({code, status, payload: result})
     

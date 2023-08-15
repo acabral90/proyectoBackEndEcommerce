@@ -2,26 +2,18 @@ import productModel from "../models/products.js";
 
 
 
-export default class ProductManager {
+export default class ProductManager{
 
     async getProducts(){
-
         const products = await productModel.find().lean();
 
         return products
     }
 
-    async getProductById(){
-
-        const pid = await addToCart();
-
-        console.log(pid);
-
-        const products = await this.getProducts();
+    async getProductById(pid){
+        const product = await productModel.findOne(pid).lean()
         
-        let filterProduct = products.filter(product => product._id == pid);
-
-        return filterProduct
+        return product    
     }
 
     async getProductsPaginate(page, category){
@@ -69,10 +61,10 @@ export default class ProductManager {
 
     }
 
-    updateProduct = async (product) =>{
-        const {title, description, price, stock, id, category} = product
+    updateProduct = async (productId, newProduct) =>{
+        const {title, description, price, stock, category} = newProduct
 
-        const dbProduct = await productModel.findById({_id: id}).lean();
+        const dbProduct = await productModel.findById({_id: productId}).lean();
 
         if(title){
             dbProduct.title = title;
@@ -86,7 +78,7 @@ export default class ProductManager {
             dbProduct.category = category
         }
 
-        const result = await productModel.updateOne({_id: id}, dbProduct);
+        const result = await productModel.updateOne({_id: productId}, dbProduct);
             
         return {
             code:202,
@@ -96,27 +88,16 @@ export default class ProductManager {
            
     };
 
-    deleteProduct = async (productId) =>{
+    deleteProduct = async (id) =>{
+        
+        const result = await productModel.deleteOne({_id: id})
 
-        if(productId._method){
-
-            const result = await productModel.deleteOne({_id: productId._method});
-
-            return {
-                code:202,
-                status: 'success',
-                result
-            }
-        }else if(productId._id){
-
-            const result = await productModel.deleteOne({_id: productId._id})
-
-            return {
-                code:202,
-                status: 'success',
-                result
-            }
+        return {
+            code:202,
+            status: 'success',
+            result
         }
+    
     };
 
 }
