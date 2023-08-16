@@ -9,13 +9,13 @@ import { getCartController,
 
 const router = Router();
 
-router.get('/', getCartController);
+router.get('/:cid', getCartController);
 
 router.delete('/:cid', deleteCartController)
 
-router.delete('/:cid/product/:pid', deleteProductCartController);
-
 router.put('/:cid', updateCartController);
+
+router.delete('/:cid/products/:pid', deleteProductCartController);
 
 router.put('/:cid/products/:pid', updateProductCartController);
 

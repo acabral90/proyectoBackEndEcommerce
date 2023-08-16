@@ -49,7 +49,7 @@ export const updateCartController = async (req, res) =>{
 
     res.send({
         status: 'success',
-        cart
+        updateCart
     });
 }
 
@@ -63,7 +63,7 @@ export const updateProductCartController = async (req, res) => {
 
     res.send({
         status: 'success',
-        cart
+        updateQuantity
     })
 }
 

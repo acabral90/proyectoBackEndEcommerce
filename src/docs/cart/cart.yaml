@@ -1,0 +1,327 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Obtener el carrito de productos
+      tags: 
+        - Carrito
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: cid es el id del carrito que desea obtener
+        schema:
+          type: string
+      responses:
+        "200":
+          description: El carrito fue obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "401":
+          description: Error por falta de permisos
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Eliminar el carrito
+      tags:
+        - Carrito
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: cid es el id del carrito que desea eliminar
+        schema:
+          type: string
+      responses:
+        "200":
+          description: El carrito fue obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "401":
+          description: Error por falta de permisos
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Agregar productos al carrito
+      tags: 
+        - Carrito
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: cid es el id del carrito que desea actualizar
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content: 
+        application/json:
+          schema:
+          $ref: '#components/requestBodies/UpdateCart'
+      responses: 
+        "200":
+          description: El producto se modificó correctamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: "#components/schemas/Product"
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}/products/{pid}:
+    delete:
+      summary: Eliminar un producto del carrito
+      tags: 
+        - Carrito
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: cid es el id del carrito en el que se encuentra el producto a eliminar 
+        schema:
+          type: string
+      - name: pid
+        in: path
+        required: true
+        description: pid es el id del producto que desea eliminar
+        schema:
+          type: string
+      responses:
+        "200":
+          description: El producto fue eliminado correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "401":
+          description: Error por falta de permisos
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Modificar la cantidad de productos que se encuentran en el carrito
+      tags:
+        - Carrito
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el id del carrito en el que se encuentra el producto a eliminar 
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto que desea eliminar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content: 
+        application/json:
+          schema:
+          $ref: '#components/requestBodies/UpdateCart'
+      responses: 
+        "200":
+          description: La cantidad del producto se modificó correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: "#components/schemas/Cart"
+        "500":
+          description: Error interno del servidor
+  /api/carts/{cid}/purchaser:
+    summary: Generar el ticket de compra
+    tags: 
+      - Carrito
+    parameters:
+      - name: cid
+        in: path
+        required: true
+        description: cid es el id del carrito en la ue se genera la compra
+        schema:
+          type: string
+    responses: 
+        "200":
+          description: El ticket de compra se generó correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    $ref: "#components/schemas/Ticket"
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id del carrito
+        products:
+          type: array
+          description: Productos dentro del carrito
+          properties:
+            _id:
+              type: ObjectId
+              decription: _id del producto
+            product:
+              type: object
+              description: producto dentro del carrito
+            quantity: 
+              type: number
+              description: cantidad de cada producto  
+      example:
+        _id: ObjectId("ksa98403skjfada7718")
+        products: [{
+          _id: ObjectId("gsa98273skjhgda8912"),
+          product: ObjectId("645aff5abb553b7e3a752c84"),
+          quantity: 86
+        }]        
+    Product:
+      type: object
+      properties: 
+        _id:
+          type: ObjectId
+          description: Id del producto
+        title:
+          type: string
+          description: Titulo del producto
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        stock: 
+          type: number
+          description: Stock del producto.
+        category:
+          type: string
+          description: Categoria del producto
+        owner:
+          type: ObjectId
+          description: Id del propietario.
+      example: 
+        _id: ObjectId("gsa98273skjhgda8912")
+        title: Camiseta de futbol
+        description: Camiseta de Argentina titular
+        price: 26.000
+        stock: 22
+        category: Camisetas
+        owner: ObjectId("gsa98273skjhgda8912")
+    Ticket:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id del ticket
+        code:
+          type: string
+          description: Codigo del ticket
+        purchase_datatime:
+          type: string
+          description: Fecha de la compra
+        amount:
+          type: number
+          description: Monto de la compra
+        purchaser:
+          type: string
+          descripcion: Mail del comprador
+        products:
+          type: object
+          description: Productos de la compra
+          properties:
+            productId:
+              type: ObjectId
+              description: Id del producto
+            price:
+              type: number
+              description: Precio del producto
+            quantity:
+              type: number
+              description: Cantidad del producto
+      example:
+        _id: ObjectId("gsa98273skjhgda8912")
+        code: "7ff5f41d-c629-4270-bf32-2e292bf16f41"
+        purchase_datatime: "5/7/2023"
+        amount: 25000
+        purchaser: "pepito@mail.com"
+        products:
+          [
+            productId: ObjectId("gsa98273skjhgda8912"),
+            price: 25000,
+            quantity: 1
+          ]
+  requestBodies:
+    UpdateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Titulo del producto
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio del producto.
+        stock: 
+          type: number
+          description: Stock del producto.
+        category:
+          type: string
+          description: Categoria del producto
+      example:
+        title: Camiseta de futbol
+        description: Camiseta de Argentina titular
+        price: 26.000
+        stock: 22
+        category: Camisetas
+    UpdateCart:
+      type: object
+      properties:
+        products:
+          type: array
+          description: Productos dentro del carrito
+          properties:
+            _id:
+              type: ObjectId
+              decription: _id del producto
+            product:
+              type: object
+              description: producto dentro del carrito
+            quantity: 
+              type: number
+              description: cantidad de cada producto  
+      example:
+        products: [
+          _id: ObjectId("gsa98273skjhgda8912"),
+          product: ObjectId("645aff5abb553b7e3a752c84"),
+          quantity: 86
+        ]        
+    
+      
