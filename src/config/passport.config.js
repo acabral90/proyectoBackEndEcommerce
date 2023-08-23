@@ -46,21 +46,19 @@ const initializePassport = () => {
     passport.use('login', new LocalStrategy({usernameField:'email'}, async (username, password, done)=>{
 
         try {
-           const user = await userService.findOne({email:username})
-            //req.logger.info(user)
+            const user = await userService.findOne({email:username})
+            console.log(user)
             if(!user){
-                
                 return done(null, false);
             }
-            if(!validatePassword(password,user)) return done (null, false);
             
+            if(!validatePassword(password,user)) return done (null, false);
             return done(null,user);
 
         } catch (error) {
             return done("Error al intentar ingresar: " + error);    
-        }
-
-    }))
+        };
+    }));
 
     passport.use('github', new GitHubStrategy({
         clientID: 'Iv1.082f639bfb951b1a',

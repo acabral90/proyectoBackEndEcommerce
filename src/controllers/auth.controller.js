@@ -29,9 +29,9 @@ export const currentController = async (req, res)=>{
     try{
         req.logger.info(req.session.user)
         const user = await userRepoService.getUserRepository(req.session.user);
-        res.send({status: 'success', payload: user})
+        res.status(200).send({status: 'success', payload: user})
     }catch (error){
-        res.send({status: 'error', error: 'Error al buscar usuario'})
+        res.status(400).send({status: 'error', error: 'Error al buscar usuario'})
     }
 };
 
@@ -57,7 +57,7 @@ export const registerController = async (req, res) =>{
 };
 
 export const loginController = async (req,res)=>{
-
+    console.log(req.user)
     if(!req.user) return res.status(400).send({status:"error", error: 'Invalid credentials'});
 
     req.session.user = {

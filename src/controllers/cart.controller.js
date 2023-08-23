@@ -8,8 +8,9 @@ import { v4 as uuidv4 } from "uuid";
 const cartManager = new CartManager();
 
 export const getCartController = async (req, res)=>{
-    const cid = req.params.cid
-    const respuesta = await cartManager.getCarts(cid);
+    //const cid = req.params.cid
+    const respuesta = await cartManager.getCarts();
+    console.log(respuesta)
 
     res.send({
         status: 'success',

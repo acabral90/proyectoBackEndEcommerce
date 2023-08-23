@@ -10,6 +10,7 @@ export const getProductsController = async (req, res)=>{
       const category = req.query;
       const { page = 1 } = req.query; 
       let { result, code, status } = await productManager.getProductsPaginate(page, category);
+      req.logger.info('Get products success')
       res.status(200).send({status, code, payload: result})
 
     } catch (error) {

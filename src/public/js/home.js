@@ -11,7 +11,8 @@ addToCartButton.forEach((button) =>{
         const card = event.target.parentNode.parentNode
 
         if (!currentCartId) {
-            const cartResponse = await fetch("api/carts", { method: "GET" });
+            const cartResponse = await fetch("api/carts/:cid", { method: "GET" });
+            console.log(cartResponse)
             const cartData = await cartResponse.json();        
             console.log(cartData)        
             currentCartId = cartData.respuesta[0]._id        
