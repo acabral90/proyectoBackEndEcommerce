@@ -3,13 +3,31 @@ import cartModel from "../dao/models/carts.js";
 import productModel from "../dao/models/products.js";
 import ticketModel from "../dao/models/tickets.js";
 import { v4 as uuidv4 } from "uuid";
+import userModel from "../dao/models/user.js";
 
 
 const cartManager = new CartManager();
 
+export const createCartController = async (req, res, next) =>{
+    const user = req.session.user;
+    const userDb = await userModel.findOne({email: user.email});
+
+    if(userDb.cart.length === 0){
+        const cart = await cartManager.createCart();
+        const {_id} = cart    
+        userDb.cart.push({_id});
+        const updateUser = await userModel.updateOne({_id: userDb._id}, {$set: userDb});
+    };
+    
+    next();
+};
+
 export const getCartController = async (req, res)=>{
-    //const cid = req.params.cid
-    const respuesta = await cartManager.getCarts();
+    
+    const user = req.session.user;
+    const userDb = await userModel.findOne({email: user.email});
+    
+    const respuesta = await cartManager.getCarts(userDb.cart[0]._id);
     console.log(respuesta)
 
     res.send({

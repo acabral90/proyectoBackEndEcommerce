@@ -27,7 +27,7 @@ export const logoutController = (req,res)=>{
 
 export const currentController = async (req, res)=>{
     try{
-        req.logger.info(req.session.user)
+        console.log(req.session.user)
         const user = await userRepoService.getUserRepository(req.session.user);
         res.status(200).send({status: 'success', payload: user})
     }catch (error){
@@ -56,7 +56,7 @@ export const registerController = async (req, res) =>{
 
 };
 
-export const loginController = async (req,res)=>{
+export const loginController = async (req, res, next)=>{
     console.log(req.user)
     if(!req.user) return res.status(400).send({status:"error", error: 'Invalid credentials'});
 
@@ -64,12 +64,15 @@ export const loginController = async (req,res)=>{
         first_name : req.user.first_name,
         last_name: req.user.last_name,
         age: req.user.age,
-        email: req.user.email
+        email: req.user.email,
+        role: req.user.role
     }
 
     req.logger.info('Login success');
 
     res.send({status:"success", payload:req.user, message:"Primer logueo!!"})
+
+    next();
 };
 
 export const passportLoginController = passport.authenticate('login');

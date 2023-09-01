@@ -4,14 +4,17 @@ import { getCartController,
     deleteProductCartController,
     updateCartController,
     updateProductCartController,
-    purchaserCartController
+    purchaserCartController,
+    createCartController
 } from "../controllers/cart.controller.js";
 
 const router = Router();
 
 router.get('/:cid', getCartController);
 
-router.delete('/:cid', deleteCartController)
+router.delete('/:cid', deleteCartController);
+
+router.post('/', createCartController);
 
 router.put('/:cid', updateCartController);
 

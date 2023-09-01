@@ -15,6 +15,7 @@ import { failRegisterController,
         userPremiumController
 } from '../controllers/auth.controller.js';
 import { checkRole } from '../middlewares/middlewares.js';
+import { createCartController } from '../controllers/cart.controller.js';
 
 const router = Router();
 
@@ -24,15 +25,15 @@ router.get('/faillogin',failLoginController);
 
 router.get('/logout', logoutController);
 
-router.get('/current', currentController)
+router.get('/current', currentController);
 
-router.get('/github', passportGithubController)
+router.get('/github', passportGithubController);
 
 router.get('/githubcallback', passportGithubCallbackController, githubCallbackController);
 
 router.post('/register', passportRegisterController, registerController);
 
-router.post('/', passportLoginController, loginController);
+router.post('/', passportLoginController, loginController, createCartController);
 
 router.post('/forgot-password', forgotPasswordController);
 

@@ -1,15 +1,17 @@
 import cartModel from "../models/carts.js";
+import userModel from "../models/user.js";
+
 
 export default class CartManager{
 
     async createCart(){
         const cart = await cartModel.create({});
-
+        
         return cart
     }
 
     async getCarts(cid){
-
+        console.log(cid)
         if(cid){
         return await cartModel.findOne({_id:cid}).lean().populate('products.product');
         }else{
@@ -22,11 +24,11 @@ export default class CartManager{
  
         const cart = await cartModel.find({_id:cid}).lean().populate('products.product');
 
-        console.log(cart[0])
+        console.log(cart[0]);
 
-        const prodIndex = cart[0].products.findIndex(product => product.product._id == pid)
+        const prodIndex = cart[0].products.findIndex(product => product.product._id == pid);
 
-        console.log(prodIndex)
+        console.log(prodIndex);
 
         if (prodIndex === -1){
             const product = {

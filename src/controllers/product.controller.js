@@ -46,10 +46,11 @@ export const createProductController = async (req, res) => {
         });
       }  
       const { result, code, status } = await productManager.addProducts(product);
-      req.logger.info('Product create success')
-      res.status(200).send({status, code, payload: result})
+      req.logger.info('Product create success');
+      res.status(200).send({status, code, payload: result});
 
     } catch (error) {
+      req.logger.error('Product create error');
       res.status(400).send({status: "error", code: error.code, payload: error.cause});
     }
   };

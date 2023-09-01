@@ -1,5 +1,6 @@
 import ProductManager from "../dao/manager/productManager.js";
 import CartManager from "../dao/manager/cartManager.js";
+import userModel from "../dao/models/user.js";
 
 const manager = new ProductManager();
 const cartManager = new CartManager();
@@ -33,15 +34,14 @@ export const getProductsController = async (req, res)=>{
 
 export const getCartController = async (req, res)=>{
 
-    const cid = req.params.cid;
-    const respuesta = await cartManager.getCarts();
-    const cart = respuesta[0];
-
+    const user = req.session.user;
+    const userDb = await userModel.findOne({email: user.email});   
+    const cart = await cartManager.getCarts(userDb.cart[0]._id);
+    
     res.render('cart',{
         status: 'success',
         cart,
         style: 'style.css'
-
     });
 };
 
