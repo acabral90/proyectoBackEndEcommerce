@@ -9,7 +9,7 @@ import { getCartController,
         forgotPasswordController,
         resetPasswordController
 } from "../controllers/views.controller.js";
-import { checkRole } from "../middlewares/middlewares.js";
+import { checkRole } from "../middlewares/checkRole.js";
 import { createCartController } from "../controllers/cart.controller.js";
 
 

@@ -2,6 +2,7 @@ import ProductManager from "../dao/manager/productManager.js";
 import { CustomError } from "../services/customError.service.js";
 import { EError } from "../enums/EError.js";
 import { generateProductErrorInfo } from "../services/productErrorInfo.js";
+import productModel from "../dao/models/products.js";
 
 const productManager = new ProductManager();
 
@@ -96,6 +97,32 @@ export const updateProductController =  async (req,res)=>{
   } catch (error) {
     req.logger.error('Product update failed')
     res.status(400).send({code, status, payload: error})
+  }
+};
+
+export const uploadImagesController = async (req, res) =>{
+  try {
+    const pid = req.params.pid;
+    const product = await productModel.findById({_id: pid}).lean();
+    if(!product.thumbnails){
+      product.thumbnails = []
+    }
+    const images = req.files['images'];
+
+    if(images){
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        product.thumbnails.push({name: 'image', reference: image.filename})   
+      };
+    };
+    const uploadProduct = await productModel.updateOne({_id: pid},{$set: product});
+    console.log(uploadProduct);
+    
+    res.json({status: 'success', message: 'Upload images success'});
+    
+  } catch (error) {
+    req.logger.error('Upload images failed')
+    res.status(400).send({payload: error})
   }
 }
 

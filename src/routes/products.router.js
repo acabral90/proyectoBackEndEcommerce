@@ -3,9 +3,11 @@ import { getProductsController,
     getProductController,
     createProductController,
     deleteProductController,
-    updateProductController 
+    updateProductController,
+    uploadImagesController 
 } from "../controllers/product.controller.js";
-import { checkRole } from "../middlewares/middlewares.js";
+import { checkRole } from "../middlewares/checkRole.js";
+import { uploaderProduct } from "../utils.js";
 
 
 const router = Router();
@@ -15,6 +17,8 @@ router.get('/', getProductsController);
 router.get('/:pid', getProductController)
 
 router.post('/', checkRole(["admin", "premium"]), createProductController);
+
+router.post('/:pid', uploaderProduct.fields([{name: 'images', maxCount: 5}]), uploadImagesController)
 
 router.delete('/:pid', checkRole(["admin", "premium"]),deleteProductController);
 

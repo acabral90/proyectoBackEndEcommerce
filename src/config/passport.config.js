@@ -10,7 +10,8 @@ const initializePassport = () => {
     
     passport.use('register', new LocalStrategy({ passReqToCallback:true, usernameField:'email'}, async (req,username,password,done) =>{
             const {first_name, last_name, email, age, role } = req.body;
-            
+            const profile = req.file
+
             try {
                 let user = await userService.findOne({email:username});
                 if(user){
@@ -23,7 +24,8 @@ const initializePassport = () => {
                         email,
                         age,
                         role,
-                        password: createHash(password) 
+                        password: createHash(password),
+                        profile: profile.filename
                 }
                 let result = await userService.create(newUser);
 

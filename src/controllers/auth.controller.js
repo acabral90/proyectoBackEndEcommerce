@@ -47,7 +47,7 @@ export const githubCallbackController = async (req,res)=>{
 
 };
 
-export const passportRegisterController = passport.authenticate('register', { failureRedirect:'/failRegister'});
+export const passportRegisterController = passport.authenticate('register'/*, { failureRedirect:'/failRegister'}*/);
 
 export const registerController = async (req, res) =>{
 
@@ -125,22 +125,4 @@ export const resetPasswordController = async (req,res)=>{
     }
 };
 
-export const userPremiumController = async (req, res)=>{
-    try {
-        const userId = req.params.uid;
-        const user = await userModel.findById(userId);
-        const userRol = user.role;
-        if(userRol === "user"){
-            user.role = "premium"
-        } else if(userRol === "premium"){
-            user.role = "user"
-        } else {
-            return res.json({status:"error", message:"no es posible cambiar el role del usuario"});
-        }
-        await userModel.updateOne({_id:user._id},user);
-        res.send({status:"success", message:"rol modificado"});
-    } catch (error) {
-        console.log(error.message);
-        res.json({status:"error", message:"hubo un error al cambiar el rol del usuario"})
-    }
-}
+

@@ -11,11 +11,11 @@ import { failRegisterController,
         loginController,
         passportLoginController,
         forgotPasswordController,
-        resetPasswordController,
-        userPremiumController
+        resetPasswordController
 } from '../controllers/auth.controller.js';
-import { checkRole } from '../middlewares/middlewares.js';
 import { createCartController } from '../controllers/cart.controller.js';
+import { lastConnection } from '../middlewares/lastConnection.js';
+import { uploaderProfile } from '../utils.js';
 
 const router = Router();
 
@@ -23,7 +23,7 @@ router.get('/failregister', failRegisterController);
 
 router.get('/faillogin',failLoginController);
 
-router.get('/logout', logoutController);
+router.get('/logout', lastConnection, logoutController);
 
 router.get('/current', currentController);
 
@@ -31,14 +31,12 @@ router.get('/github', passportGithubController);
 
 router.get('/githubcallback', passportGithubCallbackController, githubCallbackController);
 
-router.post('/register', passportRegisterController, registerController);
+router.post('/register', uploaderProfile.single('profile'), passportRegisterController, registerController);
 
-router.post('/', passportLoginController, loginController, createCartController);
+router.post('/', passportLoginController, loginController, lastConnection, createCartController);
 
 router.post('/forgot-password', forgotPasswordController);
 
 router.post('/reset-password', resetPasswordController);
-
-router.get('/premium/:uid', checkRole(['admin']), userPremiumController)
 
 export default router;
