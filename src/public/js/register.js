@@ -1,21 +1,32 @@
 const form = document.getElementById('registerForm');
 
-form.addEventListener('submit', e=>{
-    if(e.key === 'Enter'){
-    e.preventDefault();
-    form.submit()};
+form.addEventListener('submit', async (event)=>{
+    
+    event.preventDefault();
+    
     const data = new FormData(form);
-    console.log(data)
-    const obj = {};
-    const boundary = '----Boundary' + Math.random().toString().substring(2, 10);
-    data.forEach((value,key)=>obj[key]=value);
-    fetch('/api/session/register',{
+       
+    await fetch('/api/session/register',{
         method:'POST',
-        body: JSON.stringify(obj),
-        headers: {
-            'Content-Type': `multipart/form-data; boundary=${boundary}`
-        }
-    }).then(result=>result.json()).then(json =>console.log(json))
-    form.reset();
-    window.location.replace('/')
+        body: data
+    })
+    .then(result=>{
+        if(result.status === 200){
+            Swal.fire({
+                icon: 'success',
+                title: 'Excelente',
+                text: 'Te registraste correctamente',
+            });
+            window.location.replace('/');
+
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El usuario ya existe o ocurrió algo inesperado',
+                footer: 'Intenta registrarte nuevamente'
+            });
+            form.reset();
+        };
+    });
 })

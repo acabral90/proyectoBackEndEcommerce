@@ -47,7 +47,7 @@ export const githubCallbackController = async (req,res)=>{
 
 };
 
-export const passportRegisterController = passport.authenticate('register'/*, { failureRedirect:'/failRegister'}*/);
+export const passportRegisterController = passport.authenticate('register', /*{failureRedirect:'/failRegister'}*/);
 
 export const registerController = async (req, res) =>{
 

@@ -7,10 +7,10 @@ export const lastConnection = async (req, res, next) => {
     let date = "";
 
     if(req.url == '/'){
-        date = "Login:" + " " + new Date().toLocaleString('es-AR');        
+        date = new Date()     
     }
     if(req.url == '/logout'){
-        date = "logout" + " " + new Date().toLocaleString('es-AR')
+        date = new Date()
     }
 
     user.last_connection = date;

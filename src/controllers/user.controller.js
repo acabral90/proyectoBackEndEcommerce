@@ -1,4 +1,6 @@
+import res from "express/lib/response.js";
 import userModel from "../dao/models/user.js";
+import { userRepoService } from "../repository/index.js";
 
 export const userPremiumController = async (req, res)=>{
     try {
@@ -55,3 +57,38 @@ export const userDocumentsController = async (req, res)=>{
         res.json({status:"error", message: "Hubo un error en la carga de los archivos."});
     };
 };
+
+export const usersController = async (req, res) =>{
+    try {
+        const usersDb = await userModel.find().lean();
+        const users = [];
+
+        for (let i = 0; i < usersDb.length; i++) {
+            const user = usersDb[i];
+            const userDto = await userRepoService.getUserRepository(user)
+            console.log(userDto)
+            users.push(userDto)
+        }
+
+        res.json({ status: "success", message: "Se obtuvieron todos los usuarios", payload: users})
+
+    } catch (error) {
+        req.logger.error('Get users failed');
+        res.json({status: "error", message: "Se produjo un error, no se obtuvieron los usuarios"})
+    }
+}
+
+export const usersDeleteController = async (req, res) =>{
+    const usersDb = await userModel.find().lean();
+    const dateNow = new Date();
+    const dateExpired = dateNow.setHours(dateNow.getHours() - 2);
+
+    const usersExpired = usersDb.filter(user => user.last_connection <= dateExpired)
+
+    for (let i = 0; i < usersExpired.length; i++) {
+        const user = usersExpired[i];
+        await userModel.deleteOne({_id: user._id})   
+    }
+
+    res.json({status: "success", message: "Se eliminaron los usuarios correspondientes", payload: usersExpired})
+}
