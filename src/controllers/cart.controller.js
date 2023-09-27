@@ -24,9 +24,9 @@ export const createCartController = async (req, res, next) =>{
 
 export const getCartController = async (req, res)=>{
     
-    const cart = req.session.user.cart[0]._id;
-    
-    const respuesta = await cartManager.getCarts(cart);
+    const cart = req.session.user.cart
+    console.log(cart)
+    const respuesta = await cartManager.getCarts(cart[0]._id);
     console.log(respuesta)
 
     res.send({
