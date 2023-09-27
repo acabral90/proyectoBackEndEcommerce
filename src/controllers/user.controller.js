@@ -4,8 +4,8 @@ import { userRepoService } from "../repository/index.js";
 
 export const userPremiumController = async (req, res)=>{
     try {
-        const userId = req.params.uid;
-        const user = await userModel.findById(userId);
+        const userEmail = req.params.uEmail;
+        const user = await userModel.findOne({email: userEmail});
         
         if(user.role === "user"){
             if(!user.status === "completo") return res.json({status: "error", message: "No se terminó de cargar toda la documetación requerida"})
@@ -91,4 +91,12 @@ export const usersDeleteController = async (req, res) =>{
     }
 
     res.json({status: "success", message: "Se eliminaron los usuarios correspondientes", payload: usersExpired})
+}
+
+export const userDeleteController = async (req, res) =>{
+    const user = req.params.user
+
+    const userDelete = await userModel.deleteOne({ email: user })
+
+    res.json({status: 'success', message: 'Se eliminó el usuario correspondiente', payload: userDelete})
 }

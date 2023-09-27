@@ -23,7 +23,7 @@ addToCartButton.forEach((button) =>{
 
         const productId = card.querySelector("#productId").textContent.substring(3);
         console.log({ productId });
-        const updateResponse = await fetch(`/${currentCartId}/product/${productId}`, { method: "PUT" });    
+        const updateResponse = await fetch(`api/carts/${currentCartId}/product/${productId}`, { method: "PUT" });    
         console.log(updateResponse)
     });
 });

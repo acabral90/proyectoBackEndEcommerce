@@ -3,6 +3,8 @@ import { CustomError } from "../services/customError.service.js";
 import { EError } from "../enums/EError.js";
 import { generateProductErrorInfo } from "../services/productErrorInfo.js";
 import productModel from "../dao/models/products.js";
+import userModel from "../dao/models/user.js";
+import { sendProductDelete } from "../utils/email.js";
 
 const productManager = new ProductManager();
 
@@ -59,15 +61,16 @@ export const createProductController = async (req, res) => {
 export const deleteProductController = async (req,res)=>{
     try {
       const productId = req.params.pid;
-      const product = await productManager.getProductById(productId)
-      
+      const product = await productModel.findOne({_id: productId}).lean();
       if(product){
-        const productOwer = JSON.parse(JSON.stringify(product.owner));
+        const productOwner = JSON.parse(JSON.stringify(product.owner));
         const userId = JSON.parse(JSON.stringify(req.user._id));
-        if((req.user.rol === "premium" && productOwer == userId) || req.user.rol === "admin"){
-          const { code, status, result } = await productManager.deleteProduct(productId)
+        const owner = await userModel.findOne({_id: productOwner}).lean();
+        if((req.user.role === "premium" && productOwner == userId) || req.user.role === "admin"){
+          const { code, status, result } = await productModel.deleteOne({_id: productId})
+          const sendEmail = await sendProductDelete(owner.email, product)
           req.logger.info('Product delete success')
-          res.status(200).send({code, status, payload: result})
+          res.status(200).send({code, status, payload: {result}})
         }else{
           req.logger.error('Cannot delete this product')
           res.status(400).send({payload: 'error'})

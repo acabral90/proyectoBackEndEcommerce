@@ -24,10 +24,9 @@ export const createCartController = async (req, res, next) =>{
 
 export const getCartController = async (req, res)=>{
     
-    const user = req.session.user;
-    const userDb = await userModel.findOne({email: user.email});
+    const cart = req.session.user.cart._id;
     
-    const respuesta = await cartManager.getCarts(userDb.cart[0]._id);
+    const respuesta = await cartManager.getCarts(cart);
     console.log(respuesta)
 
     res.send({
@@ -77,8 +76,7 @@ export const updateProductCartController = async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid; 
     const newQuantity = req.body;
-    const cart = await cartManager.getCarts(cid);
-    const updateQuantity = await cartManager.updateProdQuantity(pid, newQuantity, cart);
+    const updateQuantity = await cartManager.updateProdQuantity(pid, newQuantity, cid);
 
     res.send({
         status: 'success',
@@ -92,7 +90,7 @@ export const purchaserCartController = async (req, res) => {
         const cart = await cartModel.find({_id:cartId}).lean().populate('products.product');
         if(cart[0]){
             if(!cart[0].products.length){
-                return res.send("Es necesario que agregue productos.")
+                return res.send("Es necesario que agregues productos.")
             }
             const ticketProducts = [];
             const rejectedProducts = [];
@@ -100,7 +98,7 @@ export const purchaserCartController = async (req, res) => {
 
             for (let i = 0; i < cart[0].products.length; i++) {
                 const cartProduct = cart[0].products[i];
-                const productDB = await productModel.findById(cartProduct.product._id);s
+                const productDB = await productModel.findById(cartProduct.product._id);
                 
                 if(cartProduct.quantity <= productDB.stock){
                     ticketProducts.push({
@@ -109,7 +107,7 @@ export const purchaserCartController = async (req, res) => {
                       quantity: cartProduct.quantity
                     })
                     total += cartProduct.quantity*productDB.price;
-                    const deletedProduct = await cartManager.deleteProductCart(cartId, cartProduct.product._id);
+                    
                     productDB.stock = productDB.stock - cartProduct.quantity;
                     await productModel.updateOne({_id: productDB._id}, productDB);
 
@@ -130,15 +128,25 @@ export const purchaserCartController = async (req, res) => {
             }
             
             const ticketCreated = await ticketModel.create(newTicket);
-            
-            res.send(ticketCreated)
+            console.log(ticketCreated)
+            req.logger.info('Purcharse success');
+            res.send({status: 'success', message: 'La compra se efectuó correctamente', payload: ticketCreated})
 
         }else{
-            res.send("El carrito no existe")
+            res.send({status: 'error', message: 'El carrito no existe'})
         }
 
     } catch (error) {
+        req.logger.error('Purchase error')
         res.send(error.message)
     }
+};
 
+export const getTicketController = async (req, res)=>{
+    
+    const tid = req.params.tid;
+    console.log(tid)
+    //const ticket = await ticketModel.findOne({_id : tid}).lean()
+    //req.logger.info('Se obtuvo el ticket')
+    //res.send({status: 'success', message: 'Ticket obtenido'})
 }

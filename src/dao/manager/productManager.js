@@ -12,7 +12,7 @@ export default class ProductManager{
 
     async getProductById(pid){
         const product = await productModel.findOne(pid).lean()
-        
+        console.log(product)
         return product    
     }
 

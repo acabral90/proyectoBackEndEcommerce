@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
         rejectUnauthorized:false
     }
 });
-//Funcion para el envio de correo electronico para recuperar la contraseña
+//Mail de recupero de contraseña
 export const sendRecoveryPass = async (userEmail,token)=>{
     console.log(userEmail, token)
     const link = `http://localhost:8080/reset-password?token=${token}`;
@@ -31,4 +31,19 @@ export const sendRecoveryPass = async (userEmail,token)=>{
         </div>
         `
     })
+};
+
+//Mail de aviso de producto eliminado
+
+export const sendProductDelete = async (uEmail, product)=>{
+    await transporter.sendMail({
+        from: options.gmail.emailAdmin,
+        to: uEmail,
+        subject: 'Producto eliminado',
+        html: `
+        <div>
+        <h1>Se eliminó un producto que creaste</h1>
+        <h2>${product.title}</h2>
+        </div>       `
+    });
 };

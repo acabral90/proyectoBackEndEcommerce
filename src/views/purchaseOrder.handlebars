@@ -69,60 +69,38 @@
 
 </nav>
 
-<div class="cartContainer">
+<div class="purcharseOrderContainer">
     <br>
-    <h1 class="text-center mb-4 border-b pb-4 text-5xl leading-tight">Carrito</h1>
+    <h1 class="text-center mb-4 border-b pb-4 text-5xl leading-tight">¡Felicitaciones!</h1>
     <br>
-    <div class="cartCheckoutContainer">
-        
-        {{#if cart.products}}
-            <div class="cartListContainer">
-                {{#each cart.products}}
-                <div class="cartProductContainer">
-                    <div class="imgContainer">
-                        <img class="productImage" src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                    </div>
-                    <div class="productContainer">
-                    <h2 class="productTitle">{{this.product.title}}</h2>
-                        <h3 class="productdescription">{{this.product.description}}</h3>
-                        <h4 id="productPrice" class="productPrice">${{this.product.price}}</h4>
-                        <h4 class="productQuantity">Cantidad:{{this.quantity}}</h4>
-                    </div>
-                </div>
-                {{/each}}
+    <div>
+      <h2>Tu compra ha sido exitosa</h2>
+      <h3>Orden de compra {{ticket.code}}</h3>
+    </div>
+    <h2>Fecha: {{ticket.purchase_datetime}}</h2>
+    <br>
+    {{#each cart.products}}
+        <div class="ticketPurcharseContainer">
+            <div>
+                <img src="{{this.product.thumbnails}}" alt="Imagen del producto">
             </div>
-            <br>
-            <div class="checkoutContainer">
-                <div class="checkoutElements">
-                    <div>
-                      <p>Subtotal</p>
-                      <p id="subtotal" class="subtotal"></p>
-                    </div>
-                    <div>
-                      <p>Descuento</p>
-                      <p></p>
-                    </div>
-                    <div>
-                      <p>Envio</p>
-                      <p></p>
-                    </div>
-                    <div>
-                      <p>Total</p>
-                      <p></p>
-                    </div>
-                    <a href="/purcharserOrder">
-                      <button type="button" id="finalizarCompra" class="inline-block rounded-full border-2 border-neutral-800 px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-neutral-800 transition duration-150 ease-in-out hover:border-neutral-800 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-neutral-800 focus:border-neutral-800 focus:text-neutral-800 focus:outline-none focus:ring-0 active:border-neutral-900 active:text-neutral-900 dark:border-neutral-900 dark:text-neutral-900 dark:hover:border-neutral-900 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10 dark:hover:text-neutral-900 dark:focus:border-neutral-900 dark:focus:text-neutral-900 dark:active:border-neutral-900 dark:active:text-neutral-900" data-te-ripple-init>
-                      Finalizar compra
-                      </button>
-                    </a>                  
-                </div>
+            <div>
+                <h2>{{this.product.title}}</h2>
+                <h2>${{this.product.price}}</h2>
+                <h2>{{this.quantity}}</h2>
             </div>
-            {{else}}
-                <h2 class="cartEmpty">El carrito está vacio</h2>        
-        {{/if}}
+            <div>
+              <p>${{this.total_price}}</span></p>
+            </div>
+        </div>
+    {{/each}}
+    <br>
+    <div>
+        <h2>Total de la compra</h2>
+        <h2>${{ticket.amount}}</h2>
     </div>
 </div>
-
-<script type="module" src="js/cart.js"></script>
-
+<div>
+  <button><a href="/products">Ir al inicio</a></button>
+</div>
 

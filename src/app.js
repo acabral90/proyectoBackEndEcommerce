@@ -36,7 +36,8 @@ const connection = mongoose.connect(MONGO);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
-app.use(express.static(__dirname+'/public'));
+app.use(express.static(__dirname +'/public'));
+app.use('/profiles', express.static(__dirname + '/multer/users/profiles'))
 app.use(session({
     store: new MongoStore({
         mongoUrl: MONGO,

@@ -7,27 +7,26 @@ import { getCartController,
         registerController,
         updateCartController,
         forgotPasswordController,
-        resetPasswordController
+        resetPasswordController,
+        usersViewsController,
+        purcharseOrderController
 } from "../controllers/views.controller.js";
 import { checkRole } from "../middlewares/checkRole.js";
 import { createCartController } from "../controllers/cart.controller.js";
 
-
-
-
- 
 const router = Router();
 
-//Ruta del chat
+//Vista del chat
 router.get('/chat', checkRole(["user"]), getChatController)
 
-//Ruta de productos
+//Vista de productos
 router.get('/products', getProductsController);
 
-//Ruta de carrito
-router.get('/carts', checkRole(["user"]), getCartController)
+//Vistas de carrito
+router.get('/carts', checkRole(["user", "premium"]), getCartController)
 
-router.put('/:cid/product/:pid', checkRole(["user"]), updateCartController);
+//Vista de orden de compra
+router.get('/purchaseOrder/:tid', checkRole(["user", "premium"]), purcharseOrderController)
 
 //Rutas de login
 router.get('/register', registerController);
@@ -40,5 +39,10 @@ router.get('/profile', profileController);
 router.get('/forgot-password', forgotPasswordController);
 
 router.get('/reset-password', resetPasswordController);
+
+//Ruta para administrar usuarios
+router.get('/users', checkRole(['admin']), usersViewsController)
+
+
 
 export default router 

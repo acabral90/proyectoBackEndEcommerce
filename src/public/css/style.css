@@ -54,3 +54,40 @@
     flex-direction: column;
     gap: 5px;
 }
+
+/*users view*/
+
+.usersContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.usersListContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.userContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.userDataContainer{
+    display: flex;
+    flex-direction: column;
+    
+};
+
+.imgContainer{
+    display: flex;
+}
+
+.userImage{
+    width: 10rem;
+    height: 10rem;
+}
+

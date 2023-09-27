@@ -61,16 +61,29 @@ export default class CartManager{
         return result        
     }
 
-    async updateProdQuantity(pid, newQuantity, cart){
+    async updateProdQuantity(pid, newQuantity, cid){
+        const cart = await cartModel.findOne({_id : cid}).lean()
+        const prodIndex = cart.products.findIndex(product => product.product == pid);
+        
+        if(prodIndex === -1){
+            const newProd = {
+                product : pid,
+                quantity : 1
+            };
 
-        const prodIndex = cart[0].products.findIndex(product => product.product._id == pid)
-
-        cart[0].products[prodIndex].quantity = newQuantity.quantity 
- 
-        const result = await cartModel.updateOne({_id:cart[0]._id}, {$set:cart[0]})
+            cart.products.push(newProd)
+        }else{
+            if(!newQuantity.quantity){
+                cart.products[prodIndex].quantity += 1
+            }else{
+                cart.products[prodIndex].quantity = newQuantity.quantity
+            }
+        }
+        
+        const result = await cartModel.updateOne({_id: cart._id}, {$set:cart})
 
         return result
-    }
+    };
 
     async deleteProductCart(cid, pid){
  
