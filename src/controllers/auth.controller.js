@@ -66,7 +66,7 @@ export const loginController = async (req, res, next)=>{
         age: req.user.age,
         email: req.user.email,
         role: req.user.role,
-        cart: req.user.cart[0]
+        cart: req.user.cart
     }
 
     req.logger.info('Login success');
