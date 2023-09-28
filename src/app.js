@@ -38,6 +38,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(express.static(__dirname +'/public'));
 app.use('/profiles', express.static(__dirname + '/multer/users/profiles'))
+app.use('/products', express.static(__dirname + '/multer/products'))
 app.use(session({
     store: new MongoStore({
         mongoUrl: MONGO,

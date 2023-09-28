@@ -1,5 +1,6 @@
-#addToCart{
+.addToCart{
     cursor: pointer;
+    
 }
 
 #productId{
@@ -14,9 +15,6 @@
     gap: 20px;
 }
 
-.cartTitle{
-    
-}
 
 .cartListContainer{
     display: flex;
@@ -91,3 +89,35 @@
     height: 10rem;
 }
 
+/*Purchase Order view*/
+
+.subtitle{
+    text-align: center;
+}
+
+.info-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ticker-purchase-container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ticket-purchase{
+    display: flex;
+    flex-direction: row;
+}
+
+.img-purchase-order{
+    width: 7rem;
+    height: 7rem;
+}
+
+.info-product{
+    display: flex;
+    flex-direction: column;
+}

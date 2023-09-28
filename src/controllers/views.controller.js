@@ -18,8 +18,9 @@ export const getProductsController = async (req, res)=>{
     const category = req.query;
     const { page = 1 } = req.query; 
     let { result, code, status } = await manager.getProductsPaginate(page, category);
-    let { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result
-    const user = await userModel.findOne({email: req.session.user.email}).lean()
+    let { docs, totalDocs, totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = result;
+    const user = await userModel.findOne({email: req.session.user.email}).lean();
+    
     console.log(req.session.user)
 
     return  res.render( 'products', {
@@ -33,18 +34,20 @@ export const getProductsController = async (req, res)=>{
         categoryExist: category.categorias === 'camisetas',
         style: 'style.css',
         user,
+        admin: user.role === 'admin'
     })
 }
 
 export const getCartController = async (req, res)=>{
 
     const user = req.session.user;
-    const userDb = await userModel.findOne({email: user.email});   
+    const userDb = await userModel.findOne({email: user.email}).lean();   
     const cart = await cartManager.getCarts(userDb.cart[0]._id);
     
     res.render('cart',{
         status: 'success',
         cart,
+        userDb,
         style: 'style.css'
     });
 };
@@ -98,13 +101,16 @@ export const usersViewsController = async ( req, res )=>{
     res.render('users', {
         userDb,
         users,
-        style: 'style.css'
+        style: 'style.css',
+        admin: user.role === 'admin'
     })
 };
 
 export const purcharseOrderController = async ( req, res )=>{
-    const tcode = req.params.tid
-    const cart_id = req.session.user.cart._id
+    const tcode = req.params.tid;
+    const cart_id = req.session.user.cart[0]._id;
+    const email = req.session.user.email;
+    const user = await userModel.findOne({email: email}).lean();   
     
     const ticket = await ticketModel.findOne({code: tcode}).lean();
     let cart = await cartModel.findOne({_id: cart_id}).lean().populate('products.product');
@@ -123,6 +129,8 @@ export const purcharseOrderController = async ( req, res )=>{
 
     res.render('purchaseOrder', {
         ticket,
-        cart
+        cart,
+        user,
+        style: 'style.css',
     })
 }

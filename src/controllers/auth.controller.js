@@ -57,7 +57,7 @@ export const registerController = async (req, res) =>{
 };
 
 export const loginController = async (req, res, next)=>{
-    console.log(req.user)
+    console.log(req.user.cart)
     if(!req.user) return res.status(400).send({status:"error", error: 'Invalid credentials'});
 
     req.session.user = {

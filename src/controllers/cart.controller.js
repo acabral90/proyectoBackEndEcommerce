@@ -9,7 +9,7 @@ import userModel from "../dao/models/user.js";
 const cartManager = new CartManager();
 
 export const createCartController = async (req, res, next) =>{
-    const user = req.session.user;
+    const user = req.user;
     const userDb = await userModel.findOne({email: user.email});
 
     if(userDb.cart.length === 0){
@@ -17,6 +17,8 @@ export const createCartController = async (req, res, next) =>{
         const {_id} = cart    
         userDb.cart.push({_id});
         const updateUser = await userModel.updateOne({_id: userDb._id}, {$set: userDb});
+
+        user.cart = cart 
     };
     
     next();
@@ -142,11 +144,3 @@ export const purchaserCartController = async (req, res) => {
     }
 };
 
-export const getTicketController = async (req, res)=>{
-    
-    const tid = req.params.tid;
-    console.log(tid)
-    //const ticket = await ticketModel.findOne({_id : tid}).lean()
-    //req.logger.info('Se obtuvo el ticket')
-    //res.send({status: 'success', message: 'Ticket obtenido'})
-}

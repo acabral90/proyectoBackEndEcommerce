@@ -33,7 +33,7 @@ router.get('/githubcallback', passportGithubCallbackController, githubCallbackCo
 
 router.post('/register', uploaderProfile.single('profile'), passportRegisterController, registerController);
 
-router.post('/', passportLoginController, loginController, lastConnection, createCartController);
+router.post('/', passportLoginController, createCartController, loginController, lastConnection);
 
 router.post('/forgot-password', forgotPasswordController);
 

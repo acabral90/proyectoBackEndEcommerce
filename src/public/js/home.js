@@ -13,7 +13,7 @@ addToCartButton.forEach((button) =>{
         console.log(card)
 
         if (!currentCartId) {
-            const cartResponse = await fetch("api/carts/:cid", { method: "GET" });
+            const cartResponse = await fetch("/api/carts/:cid", { method: "GET" });
             console.log(cartResponse)
             const cartData = await cartResponse.json();        
             console.log(cartData)        
@@ -21,10 +21,18 @@ addToCartButton.forEach((button) =>{
             console.log( {currentCartId} );        
         }
 
-        const productId = card.querySelector("#productId").textContent.substring(3);
+        const productId = card.querySelector(".productId").textContent.substring(3);
         console.log({ productId });
-        const updateResponse = await fetch(`api/carts/${currentCartId}/product/${productId}`, { method: "PUT" });    
-        console.log(updateResponse)
+        const updateResponse = await fetch(`/api/carts/${currentCartId}/product/${productId}`, { method: "PUT" });    
+        console.log(updateResponse);
+
+        Toastify({
+            text: "Se agregó un producto al carrito",
+            duration: 2000,
+            style: {
+              background: "linear-gradient(to right, #0000b6, #e5e512)",
+            }
+          }).showToast();
     });
 });
 

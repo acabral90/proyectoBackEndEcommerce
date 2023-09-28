@@ -23,19 +23,23 @@
           </svg>
         </button>
       </div>
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-end">
+      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex text-right">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            
            <a href="/chat" class="text-right text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Ir al chat</a>
             <a href="/carts" class="text-right text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Ir al carrito</a>
+            {{#if admin}}
+              <a href="/users" class="text-right text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Ver usuarios</a>
+            {{/if}}
           </div>
         </div>
       </div>
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         
-        <p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Bienvenido {{user.first_name}} </p>{{#if user.role.admin}}<p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">ADMIN</p>{{/if}}
+        <p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Bienvenido {{user.first_name}} </p>{{#if admin}}<p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">ADMIN</p>{{/if}}
 
         <!-- Profile dropdown -->
         <div class="relative ml-3">
@@ -89,9 +93,11 @@
 
           <div class="cards mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {{#each docs}}
-              <div class="group relative" id="addToCart">
+              <div class="cursor-pointer group relative" id="addToCart">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                    <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+                  {{#each this.thumbnails}}
+                  <img src="/products/{{this.reference}}" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+                  {{/each}}
                 </div>
                 <div class="mt-4 flex justify-between">
                     <div>
@@ -100,7 +106,7 @@
                           {{this.title}}
                         </h3>
                         <p class="mt-1 text-sm text-gray-500">{{this.description}}</p>
-                        <h6 id="productId">ID:{{this._id}}</h6>
+                        <h6 class="productId hidden">ID:{{this._id}}</h6>
                     </div>
                     <p class="text-sm font-medium text-gray-900">${{this.price}}</p>
                 </div>                
@@ -136,5 +142,6 @@
     <br>
   </div>
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script type="module" src="js/home.js"></script>
+<script type="module" src="/js/home.js"></script>

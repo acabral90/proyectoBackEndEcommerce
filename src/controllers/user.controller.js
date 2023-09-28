@@ -8,8 +8,12 @@ export const userPremiumController = async (req, res)=>{
         const user = await userModel.findOne({email: userEmail});
         
         if(user.role === "user"){
-            if(!user.status === "completo") return res.json({status: "error", message: "No se terminó de cargar toda la documetación requerida"})
-            user.role = "premium"
+            if(user.status === "incompleto" || user.status === "pendiente"){
+                return res.send({status: 'error', message: "No se terminó de cargar toda la documetación requerida"})
+            }else{
+                user.role = "premium"
+            } 
+            
         }else if(user.role === "premium"){
             user.role = "user"
         } else {

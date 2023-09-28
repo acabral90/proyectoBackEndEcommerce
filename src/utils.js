@@ -114,8 +114,8 @@ const productStorage = multer.diskStorage({
         cb(null,path.join(__dirname,"/multer/products"));
     },
     filename: function(req,file,cb) {
-        
-        cb(null,`${req.body.code}-image-${file.originalname}`);
+    
+        cb(null,`_id-${req.params.pid}-image-${file.originalname}`);
     }
 })
 export const uploaderProduct = multer({storage:productStorage})             

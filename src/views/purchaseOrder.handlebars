@@ -34,7 +34,7 @@
       </div>
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         
-        <p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Bienvenido {{user}}</p>{{#if admin}}<p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">ADMIN</p>{{/if}}
+        <p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Bienvenido {{user.first_name}}</p>{{#if user.role.admin}}<p class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">ADMIN</p>{{/if}}
 
         <!-- Profile dropdown -->
         <div class="relative ml-3">
@@ -42,7 +42,7 @@
             <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
             data-te-toggle="modal" data-te-target="#modal" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
               <span class="sr-only">Open user menu</span>
-              <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              <img class="h-8 w-8 rounded-full" src="/profiles/{{user.profile}}" alt="">
             </button>
           </div>
 
@@ -73,27 +73,31 @@
     <br>
     <h1 class="text-center mb-4 border-b pb-4 text-5xl leading-tight">¡Felicitaciones!</h1>
     <br>
-    <div>
-      <h2>Tu compra ha sido exitosa</h2>
-      <h3>Orden de compra {{ticket.code}}</h3>
-    </div>
-    <h2>Fecha: {{ticket.purchase_datetime}}</h2>
+    <h2 class="subtitle text-2xl">Tu compra ha sido exitosa</h2>
+    <div class="info-container">
+      <h3 class="text-lg">Orden de compra: {{ticket._id}}</h3>
+      <h2 class="text-lg">Fecha: {{ticket.purchase_datetime}}</h2>
+    </div>   
     <br>
-    {{#each cart.products}}
-        <div class="ticketPurcharseContainer">
-            <div>
-                <img src="{{this.product.thumbnails}}" alt="Imagen del producto">
-            </div>
-            <div>
-                <h2>{{this.product.title}}</h2>
-                <h2>${{this.product.price}}</h2>
-                <h2>{{this.quantity}}</h2>
-            </div>
-            <div>
-              <p>${{this.total_price}}</span></p>
-            </div>
-        </div>
-    {{/each}}
+    <div class="ticket-purchase-container">
+      {{#each cart.products}}
+          <div class="ticket-purchase">
+              <div>
+                {{#each this.product.thumbnails}}
+                  <img class="img-purchase-order" src="/products/{{this.reference}}" alt="Imagen del producto">
+                {{/each}}  
+              </div>
+              <div class="info-product">
+                  <h2>{{this.product.title}}</h2>
+                  <h2>${{this.product.price}}</h2>
+                  <h2>{{this.quantity}}</h2>
+              </div>
+              <div>
+                <p>${{this.total_price}}</span></p>
+              </div>
+          </div>
+      {{/each}}
+    </div>
     <br>
     <div>
         <h2>Total de la compra</h2>
@@ -101,6 +105,6 @@
     </div>
 </div>
 <div>
-  <button><a href="/products">Ir al inicio</a></button>
+  <button class="text-xl underline"><a href="/products">Ir al inicio</a></button>
 </div>
 

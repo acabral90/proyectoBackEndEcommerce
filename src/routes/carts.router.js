@@ -5,8 +5,7 @@ import { getCartController,
     updateCartController,
     updateProductCartController,
     purchaserCartController,
-    createCartController,
-    getTicketController
+    createCartController
 } from "../controllers/cart.controller.js";
 
 const router = Router();
@@ -24,7 +23,5 @@ router.delete('/:cid/products/:pid', deleteProductCartController);
 router.put('/:cid/product/:pid', updateProductCartController);
 
 router.post('/:cid/purchase', purchaserCartController);
-
-router.get('/tickets/:tid', getTicketController)
 
 export default router;
